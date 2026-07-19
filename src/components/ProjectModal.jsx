@@ -151,6 +151,10 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 _hover={{ opacity: 1, borderColor: 'accent.400' }}
                 onClick={() => setSelectedIndex(index)}
                 aria-label={`View image ${index + 1}: ${img.alt}`}
+                bg="bg.secondary"
+                backgroundImage={img.blur ? `url(${img.blur})` : undefined}
+                backgroundSize="cover"
+                backgroundPosition="center"
               >
                 <Image
                   src={img.thumb}
