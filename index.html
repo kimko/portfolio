@@ -4,15 +4,64 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Kopowski Woodworks — Handcrafted woodworking portfolio featuring custom cutting boards, live-edge tables, dovetail boxes, and more." />
+    <meta name="description" content="Kopowski Woodworks - Handcrafted woodworking portfolio featuring custom furniture, Shaker-style pieces, mid-century modern designs, and more." />
     <meta name="theme-color" content="#FAFAFA" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <title>Kopowski Woodworks — Handcrafted Woodworking Portfolio</title>
+    <title>Kopowski Woodworks - Handcrafted Woodworking Portfolio</title>
+    <style>
+      /* Initial loading indicator - pure CSS, shown before React mounts */
+      #app-loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: #FAFAFA;
+        font-family: 'Inter', sans-serif;
+      }
+      #app-loader .loader-text {
+        font-size: 14px;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: #9E9E9E;
+        margin-bottom: 24px;
+      }
+      #app-loader .loader-bar {
+        width: 60px;
+        height: 2px;
+        background: #E8E8E8;
+        border-radius: 2px;
+        overflow: hidden;
+        position: relative;
+      }
+      #app-loader .loader-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -60px;
+        width: 60px;
+        height: 100%;
+        background: #D4A017;
+        border-radius: 2px;
+        animation: loader-slide 1.2s ease-in-out infinite;
+      }
+      @keyframes loader-slide {
+        0% { left: -60px; }
+        50% { left: 60px; }
+        100% { left: -60px; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Shown instantly while JS loads. React replaces this on mount. -->
+      <div id="app-loader">
+        <div class="loader-text">Kopowski Woodworks</div>
+        <div class="loader-bar"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
