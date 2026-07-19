@@ -19,7 +19,10 @@ function ImagePlaceholder() {
 }
 
 export default function ProjectCard({ project, index, onClick }) {
+  const [loaded, setLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
+
+  const hero = project.hero;
 
   return (
     <MotionBox
@@ -49,22 +52,41 @@ export default function ProjectCard({ project, index, onClick }) {
         transition: 'box-shadow 0.3s ease, transform 0.3s ease',
       }}
     >
-      {/* Image container with hover zoom */}
-      <Box overflow="hidden" position="relative">
+      {/* Image container with blur-up loading */}
+      <Box overflow="hidden" position="relative" h={{ base: '220px', md: '250px' }}>
         {imgError ? (
           <ImagePlaceholder />
         ) : (
-          <Image
-            src={project.heroImage}
-            alt={project.title}
-            w="100%"
-            h={{ base: '220px', md: '250px' }}
-            objectFit="cover"
-            onError={() => setImgError(true)}
-            sx={{
-              transition: 'transform 0.4s ease',
-            }}
-          />
+          <>
+            {/* Blur placeholder - shown instantly */}
+            {hero.blur && (
+              <Box
+                position="absolute"
+                inset={0}
+                backgroundImage={`url(${hero.blur})`}
+                backgroundSize="cover"
+                backgroundPosition="center"
+                filter="blur(20px)"
+                transform="scale(1.1)"
+                opacity={loaded ? 0 : 1}
+                transition="opacity 0.4s ease"
+                zIndex={1}
+              />
+            )}
+            {/* Real thumbnail - fades in when loaded */}
+            <Image
+              src={hero.thumb}
+              alt={hero.alt}
+              w="100%"
+              h="100%"
+              objectFit="cover"
+              opacity={loaded ? 1 : 0}
+              transition="opacity 0.4s ease"
+              onLoad={() => setLoaded(true)}
+              onError={() => setImgError(true)}
+              loading="lazy"
+            />
+          </>
         )}
         {/* Gradient overlay for depth */}
         <Box
@@ -74,6 +96,7 @@ export default function ProjectCard({ project, index, onClick }) {
           right={0}
           h="40px"
           bgGradient="linear(to-t, blackAlpha.100, transparent)"
+          zIndex={2}
         />
       </Box>
 
@@ -99,4 +122,3 @@ export default function ProjectCard({ project, index, onClick }) {
     </MotionBox>
   );
 }
-

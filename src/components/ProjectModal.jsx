@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -10,13 +10,27 @@ import {
   Box,
   HStack,
   Heading,
+  Center,
+  Spinner,
 } from '@chakra-ui/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
-const MotionImage = motion.create(Image);
+const MotionBox = motion.create(Box);
 
 export default function ProjectModal({ project, isOpen, onClose }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Reset state when project changes or modal opens
+  useEffect(() => {
+    setSelectedIndex(0);
+    setImageLoaded(false);
+  }, [project]);
+
+  // Reset loaded state when switching images
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [selectedIndex]);
 
   if (!project) return null;
 
@@ -25,10 +39,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
   return (
     <Modal
       isOpen={isOpen}
-      onClose={() => {
-        setSelectedIndex(0);
-        onClose();
-      }}
+      onClose={onClose}
       size={{ base: 'full', md: '3xl' }}
       scrollBehavior="inside"
       isCentered
@@ -56,7 +67,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
           _hover={{ bg: 'whiteAlpha.900', color: 'text.primary' }}
         />
         <ModalBody p={0}>
-          {/* Main Image */}
+          {/* Main Image with blur-up + spinner */}
           <Box
             position="relative"
             w="100%"
@@ -64,19 +75,54 @@ export default function ProjectModal({ project, isOpen, onClose }) {
             bg="bg.secondary"
             overflow="hidden"
           >
+            {/* Blur placeholder */}
+            {currentImage.blur && (
+              <Box
+                position="absolute"
+                inset={0}
+                backgroundImage={`url(${currentImage.blur})`}
+                backgroundSize="cover"
+                backgroundPosition="center"
+                filter="blur(20px)"
+                transform="scale(1.1)"
+                opacity={imageLoaded ? 0 : 1}
+                transition="opacity 0.4s ease"
+                zIndex={1}
+              />
+            )}
+
+            {/* Loading spinner */}
+            {!imageLoaded && (
+              <Center position="absolute" inset={0} zIndex={2}>
+                <Spinner
+                  size="lg"
+                  color="accent.500"
+                  thickness="3px"
+                  speed="0.8s"
+                />
+              </Center>
+            )}
+
+            {/* Full-size image */}
             <AnimatePresence mode="wait">
-              <MotionImage
-                key={currentImage.src}
-                src={currentImage.src}
-                alt={currentImage.alt}
-                w="100%"
-                h="100%"
-                objectFit="cover"
+              <MotionBox
+                key={currentImage.full}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                animate={{ opacity: imageLoaded ? 1 : 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-              />
+                w="100%"
+                h="100%"
+              >
+                <Image
+                  src={currentImage.full}
+                  alt={currentImage.alt}
+                  w="100%"
+                  h="100%"
+                  objectFit="cover"
+                  onLoad={() => setImageLoaded(true)}
+                />
+              </MotionBox>
             </AnimatePresence>
           </Box>
 
@@ -98,7 +144,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
           >
             {project.images.map((img, index) => (
               <Box
-                key={img.src}
+                key={img.thumb}
                 as="button"
                 flexShrink={0}
                 w="60px"
@@ -116,7 +162,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 aria-label={`View image ${index + 1}: ${img.alt}`}
               >
                 <Image
-                  src={img.src}
+                  src={img.thumb}
                   alt={img.alt}
                   w="100%"
                   h="100%"
