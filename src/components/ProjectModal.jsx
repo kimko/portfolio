@@ -10,8 +10,6 @@ import {
   Box,
   HStack,
   Heading,
-  Center,
-  Spinner,
 } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -67,7 +65,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
           _hover={{ bg: 'whiteAlpha.900', color: 'text.primary' }}
         />
         <ModalBody p={0}>
-          {/* Main Image with blur-up + spinner */}
+          {/* Main Image with blur-up */}
           <Box
             position="relative"
             w="100%"
@@ -94,18 +92,6 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 zIndex={1}
                 pointerEvents="none"
               />
-            )}
-
-            {/* Loading spinner */}
-            {!imageLoaded && (
-              <Center position="absolute" inset={0} zIndex={2}>
-                <Spinner
-                  size="lg"
-                  color="accent.500"
-                  thickness="3px"
-                  speed="0.8s"
-                />
-              </Center>
             )}
 
             {/* Full-size image */}
