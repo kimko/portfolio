@@ -62,3 +62,8 @@ GitHub Actions on push to `main`. Workflow at `.github/workflows/deploy.yml`. Bu
 - `@chakra-ui/react` v2 (not v3) -- uses `extendTheme`, `ChakraProvider`
 - `framer-motion` -- required by Chakra v2, also used for card animations
 - `sharp` -- dev dependency for image optimization, native module
+
+## Build Notes
+
+- **Chunk size limit** is set to 600KB in `vite.config.js`. The single bundle is ~530KB (Chakra UI + Framer Motion + React). This is expected -- code-splitting has no benefit for a single-page portfolio where all code loads on first paint. Do not try to fix the warning by splitting; just raise the limit if it grows.
+- **`npm run build` must produce zero warnings.** If the build emits warnings, fix them before committing.

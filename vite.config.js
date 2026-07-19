@@ -5,4 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/portfolio/',
+  build: {
+    // Single bundle is ~530KB (Chakra UI + Framer Motion + React).
+    // Code-splitting has no benefit for a single-page portfolio.
+    chunkSizeWarningLimit: 600,
+  },
 })

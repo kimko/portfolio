@@ -68,7 +68,6 @@ export const projects = [
     images: [
       img('mcm-coffee-table', 'hero', 'MCM coffee table in living space'),
       img('mcm-coffee-table', 'detail-1', 'Angled leg detail'),
-      img('mcm-coffee-table', 'detail-2', 'Table top and leg joinery'),
     ],
   },
   {
@@ -83,7 +82,6 @@ export const projects = [
       img('dresser', 'hero', 'Dresser Fusion 360 design render'),
       img('dresser', 'detail-1', 'Dresser work in progress'),
       img('dresser', 'detail-2', 'Dresser construction progress'),
-      img('dresser', 'detail-3', 'Dresser 3D model render'),
     ],
   },
 ];
