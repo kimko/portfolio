@@ -8,7 +8,7 @@ function ImagePlaceholder() {
   return (
     <Center
       w="100%"
-      h={{ base: '220px', md: '250px' }}
+      h="100%"
       bgGradient="linear(135deg, #E8DCC8 0%, #D4C4A8 50%, #C4B090 100%)"
     >
       <Box color="whiteAlpha.700" fontSize="4xl">
@@ -58,19 +58,24 @@ export default function ProjectCard({ project, index, onClick }) {
           <ImagePlaceholder />
         ) : (
           <>
-            {/* Blur placeholder - shown instantly */}
+            {/* Blur placeholder - an actual img element using the base64 data URI */}
             {hero.blur && (
-              <Box
+              <Image
+                src={hero.blur}
+                alt=""
+                aria-hidden="true"
                 position="absolute"
-                inset={0}
-                backgroundImage={`url(${hero.blur})`}
-                backgroundSize="cover"
-                backgroundPosition="center"
+                top={0}
+                left={0}
+                w="100%"
+                h="100%"
+                objectFit="cover"
                 filter="blur(20px)"
-                transform="scale(1.1)"
+                transform="scale(1.2)"
                 opacity={loaded ? 0 : 1}
-                transition="opacity 0.4s ease"
+                transition="opacity 0.5s ease"
                 zIndex={1}
+                pointerEvents="none"
               />
             )}
             {/* Real thumbnail - fades in when loaded */}
@@ -81,10 +86,9 @@ export default function ProjectCard({ project, index, onClick }) {
               h="100%"
               objectFit="cover"
               opacity={loaded ? 1 : 0}
-              transition="opacity 0.4s ease"
+              transition="opacity 0.5s ease"
               onLoad={() => setLoaded(true)}
               onError={() => setImgError(true)}
-              loading="lazy"
             />
           </>
         )}

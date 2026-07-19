@@ -77,17 +77,22 @@ export default function ProjectModal({ project, isOpen, onClose }) {
           >
             {/* Blur placeholder */}
             {currentImage.blur && (
-              <Box
+              <Image
+                src={currentImage.blur}
+                alt=""
+                aria-hidden="true"
                 position="absolute"
-                inset={0}
-                backgroundImage={`url(${currentImage.blur})`}
-                backgroundSize="cover"
-                backgroundPosition="center"
+                top={0}
+                left={0}
+                w="100%"
+                h="100%"
+                objectFit="cover"
                 filter="blur(20px)"
-                transform="scale(1.1)"
+                transform="scale(1.2)"
                 opacity={imageLoaded ? 0 : 1}
                 transition="opacity 0.4s ease"
                 zIndex={1}
+                pointerEvents="none"
               />
             )}
 
