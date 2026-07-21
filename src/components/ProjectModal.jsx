@@ -55,6 +55,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
       onClose={onClose}
       size="full"
       scrollBehavior="inside"
+      allowPinchZoom={true}
     >
       <ModalOverlay bg="black" />
       <ModalContent bg="black" borderRadius="0" m={0}>
