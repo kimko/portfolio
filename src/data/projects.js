@@ -28,7 +28,7 @@ export const projects = [
     images: [
       img('small-table', 'hero', 'Completed small table'),
     ],
-    materials: ['Hardwood'],
+    materials: ['Alder', 'Birch'],
     techniques: ['Mortise & Tenon', 'Milling', 'Domino'],
   },
   {
@@ -43,7 +43,7 @@ export const projects = [
       img('shaker-bench', 'hero', 'Completed Shaker-style bench'),
       img('shaker-bench', 'detail-1', 'Bench joinery and construction details'),
     ],
-    materials: ['Cherry'],
+    materials: ['Walnut', 'Maple'],
     techniques: ['Frame & Panel', 'Half-Blind Dovetails', 'Domino'],
   },
   {
@@ -60,7 +60,7 @@ export const projects = [
       img('shaker-nightstands', 'detail-2', 'Nightstand construction detail'),
       img('shaker-nightstands', 'detail-3', 'Nightstand close-up'),
     ],
-    materials: ['Cherry'],
+    materials: ['Walnut', 'Maple'],
     techniques: ['Frame & Panel'],
   },
   {
@@ -75,7 +75,7 @@ export const projects = [
       img('mcm-coffee-table', 'hero', 'MCM coffee table in living space'),
       img('mcm-coffee-table', 'detail-1', 'Angled leg detail'),
     ],
-    materials: ['Walnut'],
+    materials: ['Reclaimed Red Oak'],
     techniques: ['Fusion 360', 'Angled Joinery'],
   },
   {
@@ -91,7 +91,7 @@ export const projects = [
       img('dresser', 'detail-1', 'Dresser work in progress'),
       img('dresser', 'detail-2', 'Dresser construction progress'),
     ],
-    materials: ['White Oak', 'Plywood'],
+    materials: ['Cherry', 'Cherry Veneer'],
     techniques: ['Fusion 360', 'Frame & Panel', 'Drawers'],
   },
 ];
