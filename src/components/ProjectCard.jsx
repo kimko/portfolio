@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Image, Text, VStack, Center } from '@chakra-ui/react';
+import { Box, Image, Text, VStack, Center, Wrap, WrapItem, Tag } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
 const MotionBox = motion.create(Box);
@@ -105,7 +105,7 @@ export default function ProjectCard({ project, index, onClick }) {
       </Box>
 
       {/* Content */}
-      <VStack align="start" spacing={2} p={5}>
+      <VStack align="start" spacing={3} p={5}>
         <Text
           fontSize={{ base: 'md', md: 'lg' }}
           fontWeight="600"
@@ -114,14 +114,32 @@ export default function ProjectCard({ project, index, onClick }) {
         >
           {project.title}
         </Text>
-        <Text
-          fontSize="sm"
-          color="text.secondary"
-          noOfLines={2}
-          lineHeight="1.6"
-        >
-          {project.shortDescription}
-        </Text>
+
+        <VStack align="start" spacing={2} w="100%">
+          {project.materials && project.materials.length > 0 && (
+            <Wrap spacing={2}>
+              {project.materials.map((mat) => (
+                <WrapItem key={mat}>
+                  <Tag size="sm" variant="subtle" colorScheme="orange" borderRadius="full">
+                    {mat}
+                  </Tag>
+                </WrapItem>
+              ))}
+            </Wrap>
+          )}
+          
+          {project.techniques && project.techniques.length > 0 && (
+            <Wrap spacing={2}>
+              {project.techniques.map((tech) => (
+                <WrapItem key={tech}>
+                  <Tag size="sm" variant="outline" colorScheme="gray" borderRadius="full" color="text.secondary">
+                    {tech}
+                  </Tag>
+                </WrapItem>
+              ))}
+            </Wrap>
+          )}
+        </VStack>
       </VStack>
     </MotionBox>
   );
