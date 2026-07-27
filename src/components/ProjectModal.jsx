@@ -232,14 +232,14 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 w="100%"
                 h="100%"
                 display="flex"
-                alignItems="center"
-                justifyContent="center"
+                alignItems={currentImage.is3D ? "stretch" : "center"}
+                justifyContent={currentImage.is3D ? "stretch" : "center"}
                 zIndex={2}
                 p={{ base: 0, md: 8 }}
                 pb={{ base: "90px", md: "100px" }} // Leave space for thumbnails
               >
                 {currentImage.is3D ? (
-                  <Canvas shadows dpr={[1, 2]} camera={{ fov: 50 }} style={{ width: '100%', height: '100%' }}>
+                  <Canvas shadows dpr={[1, 2]} camera={{ fov: 50 }} style={{ width: '100%', height: '100%', flex: 1 }}>
                     <Suspense fallback={null}>
                       <PresentationControls 
                         speed={1.5} 
