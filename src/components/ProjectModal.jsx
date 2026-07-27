@@ -244,7 +244,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                       <PresentationControls 
                         speed={1.5} 
                         global 
-                        zoom={0.7} 
+                        zoom={1.5} 
                         polar={[-0.1, Math.PI / 4]}
                         rotation={[0.15, Math.PI / 4, 0]}
                       >
