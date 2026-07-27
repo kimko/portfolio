@@ -196,9 +196,6 @@ export default function ProjectModal({ project, isOpen, onClose }) {
             position="relative"
             w="100%"
             bg="black"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
           >
             {/* Blur placeholder */}
             {currentImage.blur && (
@@ -229,11 +226,13 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 animate={{ opacity: imageLoaded || currentImage.is3D ? 1 : 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
+                position="absolute"
+                inset={0}
                 w="100%"
                 h="100%"
                 display="flex"
                 alignItems={currentImage.is3D ? "stretch" : "center"}
-                justifyContent={currentImage.is3D ? "stretch" : "center"}
+                justifyContent="center"
                 zIndex={2}
                 p={{ base: 0, md: 8 }}
                 pb={{ base: "90px", md: "100px" }} // Leave space for thumbnails
