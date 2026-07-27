@@ -85,6 +85,8 @@ export const projects = [
     hero: img('mcm-coffee-table', 'hero', 'MCM coffee table in living space'),
     images: [
       img('mcm-coffee-table', 'hero', 'MCM coffee table in living space'),
+      fbx('mcm-coffee-table', 'mcm-table.fbx', 'hero', 'MCM Coffee Table 3D Model'),
+      fbx('mcm-coffee-table', 'table_frame.fbx', 'hero', 'MCM Coffee Table Frame 3D Model'),
       img('mcm-coffee-table', 'detail-1', 'Angled leg detail'),
     ],
     materials: ['Reclaimed Red Oak'],
