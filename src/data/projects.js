@@ -16,6 +16,18 @@ function img(projectId, imageName, alt) {
   };
 }
 
+// Helper to build 3D fbx objects
+function fbx(projectId, fbxName, thumbName, alt) {
+  const data = manifest[projectId]?.[thumbName];
+  return {
+    is3D: true,
+    url: `${base}/images/${projectId}/${fbxName}`,
+    thumb: data ? `${base}${data.thumb}` : '',
+    blur: data ? data.blur : undefined,
+    alt,
+  };
+}
+
 export const projects = [
   {
     id: 'small-table',
@@ -88,6 +100,8 @@ export const projects = [
     hero: img('dresser', 'hero', 'Dresser Fusion 360 design render'),
     images: [
       img('dresser', 'hero', 'Dresser Fusion 360 design render'),
+      fbx('dresser', 'dresser.fbx', 'hero', 'Dresser 3D Model'),
+      fbx('dresser', 'dresser_frame.fbx', 'hero', 'Dresser Frame 3D Model'),
       img('dresser', 'detail-1', 'Dresser work in progress'),
       img('dresser', 'detail-2', 'Dresser construction progress'),
     ],
