@@ -16,9 +16,12 @@
     "@chakra-ui/react": "^2.10.10",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
     "framer-motion": "^12.42.2",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",
