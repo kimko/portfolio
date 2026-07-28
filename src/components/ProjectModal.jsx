@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Suspense, lazy } from 'react';
+import { useRoute, useLocation } from 'wouter';
 
 const ModelViewer = lazy(() => import('./ModelViewer'));
 
@@ -74,24 +75,37 @@ const ZoomOutIcon = () => (
 );
 
 export default function ProjectModal({ project, isOpen, onClose }) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [, setLocation] = useLocation();
+  const [match, params] = useRoute('/project/:id/image/:index');
+  
+  // Derive selectedIndex directly from the URL route
+  const routeIndex = match && params.index ? parseInt(params.index, 10) - 1 : 0;
+  const selectedIndex = project ? Math.max(0, Math.min(routeIndex, project.images.length - 1)) : 0;
+
   const [imageLoaded, setImageLoaded] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const isDesktop = useBreakpointValue({ base: false, md: true });
   const [showInfo, setShowInfo] = useState(false);
 
-  // Reset state when project changes or modal opens
+  // Reset info state when modal opens
   useEffect(() => {
-    setSelectedIndex(0);
-    setImageLoaded(false);
     setShowInfo(isDesktop ?? false);
-  }, [project, isOpen, isDesktop]);
+  }, [isOpen, isDesktop]);
 
   // Reset loaded state when switching images
   useEffect(() => {
     setImageLoaded(false);
     setZoomLevel(1);
   }, [selectedIndex]);
+
+  const handleIndexChange = (index) => {
+    if (!project) return;
+    if (index === 0) {
+      setLocation(`/project/${project.id}`, { replace: true });
+    } else {
+      setLocation(`/project/${project.id}/image/${index + 1}`, { replace: true });
+    }
+  };
 
   if (!project) return null;
 
@@ -384,7 +398,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                   opacity={index === selectedIndex ? 1 : 0.5}
                   transition="all 0.2s ease"
                   _hover={{ opacity: 1, borderColor: index === selectedIndex ? 'white' : 'whiteAlpha.500' }}
-                  onClick={() => setSelectedIndex(index)}
+                  onClick={() => handleIndexChange(index)}
                   aria-label={`View image ${index + 1}: ${img.alt}`}
                   bg="black"
                   backgroundImage={img.blur ? `url(${img.blur})` : undefined}

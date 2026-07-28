@@ -1,39 +1,42 @@
-import { useState } from 'react';
-import { ChakraProvider, Container, useDisclosure } from '@chakra-ui/react';
+import { ChakraProvider, Container } from '@chakra-ui/react';
+import { Router } from 'wouter';
+import { useHashLocation } from 'wouter/use-hash-location';
+import { useLocation } from 'wouter';
 import theme from './theme';
 import { projects } from './data/projects';
 import Header from './components/Header';
 import ProjectGrid from './components/ProjectGrid';
 import ProjectModal from './components/ProjectModal';
 
-function App() {
-  const [selectedProject, setSelectedProject] = useState(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const handleProjectClick = (project) => {
-    setSelectedProject(project);
-    onOpen();
-  };
-
-  const handleClose = () => {
-    setSelectedProject(null);
-    onClose();
-  };
+function AppContent() {
+  const [location, setLocation] = useLocation();
+  
+  const match = location.match(/^\/project\/([^/]+)/);
+  const projectId = match ? match[1] : null;
+  const selectedProject = projects.find(p => p.id === projectId) || null;
 
   return (
+    <Container maxW="1200px" py={{ base: 4, md: 12 }} px={{ base: 4, md: 8 }}>
+      <Header />
+      <ProjectGrid
+        projects={projects}
+        onProjectClick={(project) => setLocation(`/project/${project.id}`)}
+      />
+      <ProjectModal
+        project={selectedProject}
+        isOpen={!!selectedProject}
+        onClose={() => setLocation('/')}
+      />
+    </Container>
+  );
+}
+
+function App() {
+  return (
     <ChakraProvider theme={theme}>
-      <Container maxW="1200px" py={{ base: 4, md: 12 }} px={{ base: 4, md: 8 }}>
-        <Header />
-        <ProjectGrid
-          projects={projects}
-          onProjectClick={handleProjectClick}
-        />
-        <ProjectModal
-          project={selectedProject}
-          isOpen={isOpen}
-          onClose={handleClose}
-        />
-      </Container>
+      <Router hook={useHashLocation}>
+        <AppContent />
+      </Router>
     </ChakraProvider>
   );
 }
