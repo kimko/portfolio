@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useFBX, Stage, PresentationControls, Html } from '@react-three/drei';
+import { VStack, Spinner, Text } from '@chakra-ui/react';
 
 function FBXModel({ url }) {
   const fbx = useFBX(url);
@@ -9,11 +10,10 @@ function FBXModel({ url }) {
 
 const CanvasLoader = () => (
   <Html center>
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'rgba(255,255,255,0.7)', fontFamily: 'sans-serif' }}>
-      <div style={{ width: '40px', height: '40px', border: '3px solid rgba(255,255,255,0.2)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: '16px' }} />
-      <div style={{ letterSpacing: '2px', fontSize: '14px', textTransform: 'uppercase' }}>Loading Model</div>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-    </div>
+    <VStack justify="center" align="center" color="whiteAlpha.700">
+      <Spinner size="xl" thickness="3px" color="white" emptyColor="whiteAlpha.200" mb={4} />
+      <Text fontSize="sm" letterSpacing="widest" textTransform="uppercase">Loading Model</Text>
+    </VStack>
   </Html>
 );
 

@@ -48,6 +48,11 @@ export default function ProjectCard({ project, index, onClick }) {
         boxShadow: '0 12px 40px rgba(0, 0, 0, 0.08)',
         transform: 'translateY(-4px)',
       }}
+      _focusVisible={{
+        outline: '3px solid #E8DCC8',
+        outlineOffset: '2px',
+        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.08)',
+      }}
       sx={{
         transition: 'box-shadow 0.3s ease, transform 0.3s ease',
       }}

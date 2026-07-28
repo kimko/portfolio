@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -19,7 +19,6 @@ import {
   useBreakpointValue
 } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Suspense, lazy } from 'react';
 import { useRoute, useLocation } from 'wouter';
 
 const ModelViewer = lazy(() => import('./ModelViewer'));
@@ -82,14 +81,28 @@ export default function ProjectModal({ project, isOpen, onClose }) {
   const routeIndex = match && params.index ? parseInt(params.index, 10) - 1 : 0;
   const selectedIndex = project ? Math.max(0, Math.min(routeIndex, project.images.length - 1)) : 0;
 
+  // Keep a reference to the active project so the exit animation has data to render
+  const [prevProject, setPrevProject] = useState(project);
+  useEffect(() => {
+    if (project) setPrevProject(project);
+  }, [project]);
+  const activeProject = project || prevProject;
+
   const [imageLoaded, setImageLoaded] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const isDesktop = useBreakpointValue({ base: false, md: true });
-  const [showInfo, setShowInfo] = useState(false);
+  const initialMount = useRef(true);
 
-  // Reset info state when modal opens
+  // Initialize info state only on initial mount or when modal opens
   useEffect(() => {
-    setShowInfo(isDesktop ?? false);
+    if (isOpen) {
+      if (initialMount.current) {
+        setShowInfo(isDesktop ?? false);
+        initialMount.current = false;
+      }
+    } else {
+      initialMount.current = true;
+    }
   }, [isOpen, isDesktop]);
 
   // Reset loaded state when switching images
@@ -107,9 +120,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
     }
   };
 
-  if (!project) return null;
-
-  const currentImage = project.images[selectedIndex];
+  const currentImage = activeProject?.images[selectedIndex];
 
   return (
     <Modal
@@ -132,7 +143,9 @@ export default function ProjectModal({ project, isOpen, onClose }) {
           _hover={{ bg: 'whiteAlpha.400' }}
         />
         
-        {/* Info Toggle Button */}
+        {activeProject && currentImage && (
+          <>
+            {/* Info Toggle Button */}
         <MotionBox 
           position="absolute" 
           top={4} 
@@ -230,13 +243,13 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 }}
               >
                 <Heading as="h2" fontSize="2xl" color="white" mb={2}>
-                  {project.title}
+                  {activeProject.title}
                 </Heading>
                 
                 <VStack align="start" spacing={3} mb={6}>
-                  {project.materials && project.materials.length > 0 && (
+                  {activeProject.materials && activeProject.materials.length > 0 && (
                     <Wrap spacing={2}>
-                      {project.materials.map((mat) => (
+                      {activeProject.materials.map((mat) => (
                         <WrapItem key={mat}>
                           <Tag size="md" variant="subtle" colorScheme="orange" borderRadius="sm">
                             {mat}
@@ -246,9 +259,9 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                     </Wrap>
                   )}
                   
-                  {project.techniques && project.techniques.length > 0 && (
+                  {activeProject.techniques && activeProject.techniques.length > 0 && (
                     <Wrap spacing={2}>
-                      {project.techniques.map((tech) => (
+                      {activeProject.techniques.map((tech) => (
                         <WrapItem key={tech}>
                           <Tag size="md" bg="whiteAlpha.200" color="whiteAlpha.800" borderRadius="sm">
                             {tech}
@@ -262,7 +275,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 <Box w="40px" h="2px" bg="accent.500" borderRadius="full" mb={4} />
                 
                 <Text color="whiteAlpha.800" lineHeight="1.8" fontSize="md">
-                  {project.fullDescription}
+                  {activeProject.fullDescription}
                 </Text>
               </MotionBox>
             )}
@@ -329,7 +342,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                   >
                     <MotionBox
                       drag={zoomLevel > 1}
-                      dragConstraints={{ left: -1000, right: 1000, top: -1000, bottom: 1000 }}
+                      dragConstraints={{ left: -300, right: 300, top: -300, bottom: 300 }}
                       dragElastic={0.1}
                       animate={{ scale: zoomLevel }}
                       transition={{ duration: 0.3 }}
@@ -381,7 +394,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 '&::-webkit-scrollbar': { display: 'none' },
               }}
             >
-              {project.images.map((img, index) => (
+              {activeProject.images.map((img, index) => (
                 <Box
                   key={img.url || img.full}
                   as="button"
@@ -430,7 +443,8 @@ export default function ProjectModal({ project, isOpen, onClose }) {
               ))}
             </HStack>
           </Box>
-
+          </>
+        )}
         </ModalBody>
       </ModalContent>
     </Modal>

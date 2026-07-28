@@ -1,7 +1,6 @@
 import { ChakraProvider, Container } from '@chakra-ui/react';
-import { Router } from 'wouter';
+import { Router, useLocation } from 'wouter';
 import { useHashLocation } from 'wouter/use-hash-location';
-import { useLocation } from 'wouter';
 import theme from './theme';
 import { projects } from './data/projects';
 import Header from './components/Header';
