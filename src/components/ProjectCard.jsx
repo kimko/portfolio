@@ -35,15 +35,10 @@ export default function ProjectCard({ project, index, onClick }) {
       borderColor="border.subtle"
       overflow="hidden"
       cursor="pointer"
+      as="button"
+      textAlign="left"
+      w="100%"
       onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onClick();
-        }
-      }}
       _hover={{
         boxShadow: '0 12px 40px rgba(0, 0, 0, 0.08)',
         transform: 'translateY(-4px)',
