@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "optimize": "node scripts/optimize-images.mjs",
+    "manage": "node scripts/manage.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
@@ -24,6 +25,7 @@
     "three": "^0.185.1"
   },
   "devDependencies": {
+    "@inquirer/prompts": "^8.5.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",

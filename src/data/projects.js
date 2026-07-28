@@ -28,87 +28,16 @@ function fbx(projectId, fbxName, thumbName, alt) {
   };
 }
 
-export const projects = [
-  {
-    id: 'small-table',
-    title: 'Small Table',
-    shortDescription:
-      'Built during the "Foundations of Furniture Making" class at Chicago School of Woodworking, focused on precision milling and mortise-and-tenon joinery.',
-    fullDescription:
-      'This small table was my first furniture project, built during the "Foundations of Furniture Making" class at the Chicago School of Woodworking. The core focus of the class was the milling process -- jointing a face and an edge, ripping to width, planing to thickness, and crosscutting to final length, ensuring each board is accurately squared and ready for joinery and assembly. The table features mortise-and-tenon joinery created using a router table, mortising machine, tenoning jig, and a Festool Domino.',
-    hero: img('small-table', 'hero', 'Completed small table'),
-    images: [
-      img('small-table', 'hero', 'Completed small table'),
-    ],
-    materials: ['Alder', 'Birch'],
-    techniques: ['Mortise & Tenon', 'Milling', 'Domino'],
-  },
-  {
-    id: 'shaker-bench',
-    title: 'Shaker Style Bench',
-    shortDescription:
-      'Frame-and-panel construction with half-blind dovetails and tongue-and-groove joints, built at Chicago School of Woodworking.',
-    fullDescription:
-      'This Shaker-style bench was built during the "Furniture Making - Joinery and Jigs" class at the Chicago School of Woodworking. A key component of the class is frame-and-panel construction, which allows for seasonal wood movement. The bench features tongue-and-groove joints made using both a router table and a dado blade. I used a router with a jig to create half-blind dovetails, the router table for chamfered edges, and the Festool Domino for accurate, efficient joinery.',
-    hero: img('shaker-bench', 'hero', 'Completed Shaker-style bench'),
-    images: [
-      img('shaker-bench', 'hero', 'Completed Shaker-style bench'),
-      img('shaker-bench', 'detail-1', 'Bench joinery and construction details'),
-    ],
-    materials: ['Walnut', 'Maple'],
-    techniques: ['Frame & Panel', 'Half-Blind Dovetails', 'Domino'],
-  },
-  {
-    id: 'shaker-nightstands',
-    title: 'Shaker Style Nightstands',
-    shortDescription:
-      'My first independently designed project -- a pair of nightstands iterating on the Shaker bench design.',
-    fullDescription:
-      'These two Shaker-style nightstands were my first project designed and executed completely on my own. I iterated on the design from the Shaker-style bench, adapting the frame-and-panel construction and joinery techniques I learned in class into a new form factor. Building a matching pair added an extra layer of challenge -- every cut, every joint had to be replicated precisely across both pieces.',
-    hero: img('shaker-nightstands', 'hero', 'Pair of Shaker-style nightstands'),
-    images: [
-      img('shaker-nightstands', 'hero', 'Pair of Shaker-style nightstands'),
-      img('shaker-nightstands', 'detail-1', 'Nightstand detail view'),
-      img('shaker-nightstands', 'detail-2', 'Nightstand construction detail'),
-      img('shaker-nightstands', 'detail-3', 'Nightstand close-up'),
-    ],
-    materials: ['Walnut', 'Maple'],
-    techniques: ['Frame & Panel'],
-  },
-  {
-    id: 'mcm-coffee-table',
-    title: 'MCM Coffee Table',
-    shortDescription:
-      'Mid-century modern coffee table designed in Fusion 360, featuring precise 10-degree angled legs.',
-    fullDescription:
-      'I designed this mid-century modern coffee table using Fusion 360, which was a fun learning experiment in CAD modeling for furniture. The build featured my first time using precise 10-degree angle cuts for the angled legs, a defining characteristic of the MCM aesthetic. Translating a digital design into a physical piece taught me a lot about the gap between CAD precision and workshop reality.',
-    hero: img('mcm-coffee-table', 'hero', 'MCM coffee table in living space'),
-    images: [
-      img('mcm-coffee-table', 'hero', 'MCM coffee table in living space'),
-      fbx('mcm-coffee-table', 'mcm-table.fbx', 'mcm-table_preview', 'MCM Coffee Table 3D Model'),
-      fbx('mcm-coffee-table', 'table_frame.fbx', 'table_frame_preview', 'MCM Coffee Table Frame 3D Model'),
-      img('mcm-coffee-table', 'detail-1', 'Angled leg detail'),
-    ],
-    materials: ['Reclaimed Red Oak'],
-    techniques: ['Fusion 360', 'Angled Joinery'],
-  },
-  {
-    id: 'dresser',
-    title: 'Dresser',
-    shortDescription:
-      'An ambitious work-in-progress, fully designed from scratch in Fusion 360.',
-    fullDescription:
-      'This dresser is my most ambitious project to date and is currently a work in progress. I designed everything from scratch in Fusion 360, working through the engineering challenges of drawer construction, panel alignment, and structural integrity at this scale. The design features multiple drawer configurations and frame-and-panel side construction.',
-    hero: img('dresser', 'hero', 'Dresser Fusion 360 design render'),
-    images: [
-      img('dresser', 'hero', 'Dresser Fusion 360 design render'),
-      fbx('dresser', 'dresser.fbx', 'dresser_preview', 'Dresser 3D Model'),
-      fbx('dresser', 'dresser_frame.fbx', 'dresser_frame_preview', 'Dresser Frame 3D Model'),
-      fbx('dresser', 'dominos.fbx', 'dominos_preview', 'Dresser Dominos 3D Model'),
-      img('dresser', 'detail-1', 'Dresser work in progress'),
-      img('dresser', 'detail-2', 'Dresser construction progress'),
-    ],
-    materials: ['Cherry', 'Cherry Veneer'],
-    techniques: ['Fusion 360', 'Frame & Panel', 'Drawers'],
-  },
-];
+import projectsData from './projects.json';
+
+export const projects = projectsData.map(project => ({
+  ...project,
+  hero: project.hero.type === 'img' 
+    ? img(project.id, project.hero.name, project.hero.alt)
+    : fbx(project.id, project.hero.file, project.hero.thumb, project.hero.alt),
+  images: project.images.map(image => 
+    image.type === 'img'
+      ? img(project.id, image.name, image.alt)
+      : fbx(project.id, image.file, image.thumb, image.alt)
+  )
+}));
