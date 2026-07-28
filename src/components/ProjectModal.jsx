@@ -443,9 +443,9 @@ export default function ProjectModal({ project, isOpen, onClose }) {
               ))}
             </HStack>
           </Box>
-          </>
-        )}
         </ModalBody>
+        </>
+        )}
       </ModalContent>
     </Modal>
   );
