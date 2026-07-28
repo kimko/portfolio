@@ -132,7 +132,7 @@ export default function ProjectCard({ project, index, onClick }) {
             <Wrap spacing={2}>
               {project.techniques.map((tech) => (
                 <WrapItem key={tech}>
-                  <Tag size="sm" bg="whiteAlpha.200" color="whiteAlpha.800" borderRadius="sm">
+                  <Tag size="sm" bg="gray.100" color="gray.600" borderRadius="sm">
                     {tech}
                   </Tag>
                 </WrapItem>
