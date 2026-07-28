@@ -85,8 +85,8 @@ export const projects = [
     hero: img('mcm-coffee-table', 'hero', 'MCM coffee table in living space'),
     images: [
       img('mcm-coffee-table', 'hero', 'MCM coffee table in living space'),
-      fbx('mcm-coffee-table', 'mcm-table.fbx', 'hero', 'MCM Coffee Table 3D Model'),
-      fbx('mcm-coffee-table', 'table_frame.fbx', 'hero', 'MCM Coffee Table Frame 3D Model'),
+      fbx('mcm-coffee-table', 'mcm-table.fbx', 'mcm-table_preview', 'MCM Coffee Table 3D Model'),
+      fbx('mcm-coffee-table', 'table_frame.fbx', 'table_frame_preview', 'MCM Coffee Table Frame 3D Model'),
       img('mcm-coffee-table', 'detail-1', 'Angled leg detail'),
     ],
     materials: ['Reclaimed Red Oak'],
@@ -102,8 +102,9 @@ export const projects = [
     hero: img('dresser', 'hero', 'Dresser Fusion 360 design render'),
     images: [
       img('dresser', 'hero', 'Dresser Fusion 360 design render'),
-      fbx('dresser', 'dresser.fbx', 'hero', 'Dresser 3D Model'),
-      fbx('dresser', 'dresser_frame.fbx', 'hero', 'Dresser Frame 3D Model'),
+      fbx('dresser', 'dresser.fbx', 'dresser_preview', 'Dresser 3D Model'),
+      fbx('dresser', 'dresser_frame.fbx', 'dresser_frame_preview', 'Dresser Frame 3D Model'),
+      fbx('dresser', 'dominos.fbx', 'dominos_preview', 'Dresser Dominos 3D Model'),
       img('dresser', 'detail-1', 'Dresser work in progress'),
       img('dresser', 'detail-2', 'Dresser construction progress'),
     ],
