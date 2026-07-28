@@ -91,6 +91,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const isDesktop = useBreakpointValue({ base: false, md: true });
+  const [showInfo, setShowInfo] = useState(false);
   const initialMount = useRef(true);
 
   // Initialize info state only on initial mount or when modal opens
