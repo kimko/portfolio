@@ -24,6 +24,14 @@ export default function ProjectCard({ project, index, onClick }) {
 
   const hero = project.hero;
 
+  const prefetchAssets = () => {
+    // Silently prefetch the high-res hero image so the modal loads instantly
+    if (hero && hero.thumb) {
+      const img = new window.Image();
+      img.src = hero.thumb;
+    }
+  };
+
   return (
     <MotionBox
       initial={{ opacity: 0, y: 30 }}
@@ -38,6 +46,8 @@ export default function ProjectCard({ project, index, onClick }) {
       as="button"
       textAlign="left"
       w="100%"
+      onMouseEnter={prefetchAssets}
+      onTouchStart={prefetchAssets}
       onClick={onClick}
       _hover={{
         boxShadow: '0 12px 40px rgba(0, 0, 0, 0.08)',
