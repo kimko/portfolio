@@ -15,7 +15,8 @@ import {
   WrapItem,
   Tag,
   Button,
-  Spinner
+  Spinner,
+  useBreakpointValue
 } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Suspense, lazy } from 'react';
@@ -58,14 +59,15 @@ const ImageIcon = () => (
 export default function ProjectModal({ project, isOpen, onClose }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const isDesktop = useBreakpointValue({ base: false, md: true });
   const [showInfo, setShowInfo] = useState(false);
 
   // Reset state when project changes or modal opens
   useEffect(() => {
     setSelectedIndex(0);
     setImageLoaded(false);
-    setShowInfo(false);
-  }, [project, isOpen]);
+    setShowInfo(isDesktop ?? false);
+  }, [project, isOpen, isDesktop]);
 
   // Reset loaded state when switching images
   useEffect(() => {
