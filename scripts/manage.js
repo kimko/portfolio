@@ -68,8 +68,13 @@ async function processImages(projectId) {
       images.push({ type: 'fbx', file, thumb, alt });
       
     } else if (isImage) {
-      // It's an image. What's its ID?
+      // Skip _preview images, as they are meant for the FBX models
       const baseName = path.parse(file).name;
+      if (baseName.endsWith('_preview')) {
+        continue;
+      }
+      
+      // It's an image. What's its ID?
       const isHero = hero === null ? await confirm({ message: `Is ${file} the hero image?` }) : false;
       const name = isHero ? 'hero' : await input({ message: `Internal name for ${file} (e.g. detail-1)?`, default: baseName });
       const alt = await input({ message: `Alt text for ${file}?` });
