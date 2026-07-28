@@ -120,7 +120,7 @@ export default function ProjectCard({ project, index, onClick }) {
             <Wrap spacing={2}>
               {project.materials.map((mat) => (
                 <WrapItem key={mat}>
-                  <Tag size="sm" variant="subtle" colorScheme="orange" borderRadius="full">
+                  <Tag size="sm" variant="subtle" colorScheme="orange" borderRadius="sm">
                     {mat}
                   </Tag>
                 </WrapItem>
@@ -132,7 +132,7 @@ export default function ProjectCard({ project, index, onClick }) {
             <Wrap spacing={2}>
               {project.techniques.map((tech) => (
                 <WrapItem key={tech}>
-                  <Tag size="sm" variant="outline" colorScheme="gray" borderRadius="full" color="text.secondary">
+                  <Tag size="sm" bg="whiteAlpha.200" color="whiteAlpha.800" borderRadius="sm">
                     {tech}
                   </Tag>
                 </WrapItem>

@@ -224,7 +224,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                     <Wrap spacing={2}>
                       {project.materials.map((mat) => (
                         <WrapItem key={mat}>
-                          <Tag size="md" variant="subtle" colorScheme="orange" borderRadius="full">
+                          <Tag size="md" variant="subtle" colorScheme="orange" borderRadius="sm">
                             {mat}
                           </Tag>
                         </WrapItem>
@@ -236,7 +236,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                     <Wrap spacing={2}>
                       {project.techniques.map((tech) => (
                         <WrapItem key={tech}>
-                          <Tag size="md" variant="outline" colorScheme="whiteAlpha" color="whiteAlpha.800" borderRadius="full">
+                          <Tag size="md" bg="whiteAlpha.200" color="whiteAlpha.800" borderRadius="sm">
                             {tech}
                           </Tag>
                         </WrapItem>
