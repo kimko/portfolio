@@ -7,7 +7,7 @@ import Header from './components/Header';
 import ProjectGrid from './components/ProjectGrid';
 import ProjectModal from './components/ProjectModal';
 
-function AppContent() {
+export function AppContent() {
   const [location, setLocation] = useLocation();
   
   const match = location.match(/^\/project\/([^/]+)/);

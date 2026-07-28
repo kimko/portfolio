@@ -10,4 +10,9 @@ export default defineConfig({
     // The 3D Engine chunk (Three.js) is ~1MB, but is safely code-split and lazy-loaded.
     chunkSizeWarningLimit: 1500,
   },
+  test: {
+    environment: 'happy-dom',
+    globals: true,
+    setupFiles: ['./src/setupTests.js'],
+  }
 })
