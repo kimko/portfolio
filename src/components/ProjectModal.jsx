@@ -57,7 +57,7 @@ const ImageIcon = () => (
 );
 
 const ZoomInIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="11" cy="11" r="8"></circle>
     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
     <line x1="11" y1="8" x2="11" y2="14"></line>
@@ -66,7 +66,7 @@ const ZoomInIcon = () => (
 );
 
 const ZoomOutIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="11" cy="11" r="8"></circle>
     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
     <line x1="8" y1="11" x2="14" y2="11"></line>
@@ -149,23 +149,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
 
         {/* Zoom Controls (Desktop only, Images only) */}
         {isDesktop && !currentImage.is3D && (
-          <VStack position="absolute" top="50%" right={6} transform="translateY(-50%)" zIndex={20} spacing={4}>
-            <Button
-              onClick={() => setZoomLevel(z => Math.min(z + 0.5, 3))}
-              bg="rgba(20, 20, 20, 0.6)"
-              color="white"
-              backdropFilter="blur(10px)"
-              border="1px solid"
-              borderColor="whiteAlpha.300"
-              _hover={{ bg: "whiteAlpha.400" }}
-              borderRadius="full"
-              w="48px"
-              h="48px"
-              p={0}
-              isDisabled={zoomLevel >= 3}
-            >
-              <ZoomInIcon />
-            </Button>
+          <HStack position="absolute" top={4} left="50%" transform="translateX(-50%)" zIndex={20} spacing={4}>
             <Button
               onClick={() => setZoomLevel(z => Math.max(z - 0.5, 1))}
               bg="rgba(20, 20, 20, 0.6)"
@@ -175,14 +159,32 @@ export default function ProjectModal({ project, isOpen, onClose }) {
               borderColor="whiteAlpha.300"
               _hover={{ bg: "whiteAlpha.400" }}
               borderRadius="full"
-              w="48px"
-              h="48px"
+              w="56px"
+              h="56px"
               p={0}
               isDisabled={zoomLevel === 1}
+              aria-label="Zoom Out"
             >
               <ZoomOutIcon />
             </Button>
-          </VStack>
+            <Button
+              onClick={() => setZoomLevel(z => Math.min(z + 0.5, 3))}
+              bg="rgba(20, 20, 20, 0.6)"
+              color="white"
+              backdropFilter="blur(10px)"
+              border="1px solid"
+              borderColor="whiteAlpha.300"
+              _hover={{ bg: "whiteAlpha.400" }}
+              borderRadius="full"
+              w="56px"
+              h="56px"
+              p={0}
+              isDisabled={zoomLevel >= 3}
+              aria-label="Zoom In"
+            >
+              <ZoomInIcon />
+            </Button>
+          </HStack>
         )}
 
         <ModalBody p={0} display="flex" flexDirection="column" h="100vh" overflow="hidden" position="relative">
