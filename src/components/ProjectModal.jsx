@@ -14,7 +14,8 @@ import {
   Wrap,
   WrapItem,
   Tag,
-  Button
+  Button,
+  Spinner
 } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Suspense, lazy } from 'react';
@@ -22,6 +23,13 @@ import { Suspense, lazy } from 'react';
 const ModelViewer = lazy(() => import('./ModelViewer'));
 
 const MotionBox = motion.create(Box);
+
+const Loading3D = () => (
+  <VStack justify="center" align="center" h="100%" w="100%" position="absolute" inset={0} zIndex={1} color="whiteAlpha.700">
+    <Spinner size="xl" thickness="3px" color="white" emptyColor="whiteAlpha.200" mb={4} />
+    <Text fontSize="sm" letterSpacing="widest" textTransform="uppercase">Loading 3D Engine</Text>
+  </VStack>
+);
 
 const InfoIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -233,7 +241,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 pb={{ base: "90px", md: "100px" }} // Leave space for thumbnails
               >
                 {currentImage.is3D ? (
-                  <Suspense fallback={null}>
+                  <Suspense fallback={<Loading3D />}>
                     <ModelViewer url={currentImage.url} />
                   </Suspense>
                 ) : (
