@@ -56,9 +56,27 @@ const ImageIcon = () => (
   </svg>
 );
 
+const ZoomInIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    <line x1="11" y1="8" x2="11" y2="14"></line>
+    <line x1="8" y1="11" x2="14" y2="11"></line>
+  </svg>
+);
+
+const ZoomOutIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    <line x1="8" y1="11" x2="14" y2="11"></line>
+  </svg>
+);
+
 export default function ProjectModal({ project, isOpen, onClose }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
   const isDesktop = useBreakpointValue({ base: false, md: true });
   const [showInfo, setShowInfo] = useState(false);
 
@@ -72,6 +90,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
   // Reset loaded state when switching images
   useEffect(() => {
     setImageLoaded(false);
+    setZoomLevel(1);
   }, [selectedIndex]);
 
   if (!project) return null;
@@ -127,6 +146,44 @@ export default function ProjectModal({ project, isOpen, onClose }) {
             {showInfo ? "Hide Details" : "Project Info"}
           </Button>
         </MotionBox>
+
+        {/* Zoom Controls (Desktop only, Images only) */}
+        {isDesktop && !currentImage.is3D && (
+          <VStack position="absolute" top="50%" right={6} transform="translateY(-50%)" zIndex={20} spacing={4}>
+            <Button
+              onClick={() => setZoomLevel(z => Math.min(z + 0.5, 3))}
+              bg="rgba(20, 20, 20, 0.6)"
+              color="white"
+              backdropFilter="blur(10px)"
+              border="1px solid"
+              borderColor="whiteAlpha.300"
+              _hover={{ bg: "whiteAlpha.400" }}
+              borderRadius="full"
+              w="48px"
+              h="48px"
+              p={0}
+              isDisabled={zoomLevel >= 3}
+            >
+              <ZoomInIcon />
+            </Button>
+            <Button
+              onClick={() => setZoomLevel(z => Math.max(z - 0.5, 1))}
+              bg="rgba(20, 20, 20, 0.6)"
+              color="white"
+              backdropFilter="blur(10px)"
+              border="1px solid"
+              borderColor="whiteAlpha.300"
+              _hover={{ bg: "whiteAlpha.400" }}
+              borderRadius="full"
+              w="48px"
+              h="48px"
+              p={0}
+              isDisabled={zoomLevel === 1}
+            >
+              <ZoomOutIcon />
+            </Button>
+          </VStack>
+        )}
 
         <ModalBody p={0} display="flex" flexDirection="column" h="100vh" overflow="hidden" position="relative">
           
@@ -247,14 +304,37 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                     <ModelViewer url={currentImage.url} />
                   </Suspense>
                 ) : (
-                  <Image
-                    src={currentImage.full}
-                    alt={currentImage.alt}
-                    maxW="100%"
-                    maxH="100%"
-                    objectFit="contain"
-                    onLoad={() => setImageLoaded(true)}
-                  />
+                  <MotionBox
+                    w="100%"
+                    h="100%"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <MotionBox
+                      drag={zoomLevel > 1}
+                      dragConstraints={{ left: -1000, right: 1000, top: -1000, bottom: 1000 }}
+                      dragElastic={0.1}
+                      animate={{ scale: zoomLevel }}
+                      transition={{ duration: 0.3 }}
+                      style={{ cursor: zoomLevel > 1 ? 'grab' : 'default' }}
+                      w="100%"
+                      h="100%"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Image
+                        src={currentImage.full}
+                        alt={currentImage.alt}
+                        maxW="100%"
+                        maxH="100%"
+                        objectFit="contain"
+                        onLoad={() => setImageLoaded(true)}
+                        pointerEvents="none"
+                      />
+                    </MotionBox>
+                  </MotionBox>
                 )}
               </MotionBox>
             </AnimatePresence>
