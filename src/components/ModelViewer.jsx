@@ -28,7 +28,7 @@ export default function ModelViewer({ url }) {
           polar={[-0.1, Math.PI / 4]}
           rotation={[0.15, Math.PI / 4, 0]}
         >
-          <Stage environment="city" intensity={0.6}>
+          <Stage environment={{ files: '/potsdamer_platz_1k.hdr' }} intensity={0.6}>
             <group rotation={[-Math.PI / 2, 0, 0]}>
               <FBXModel url={url} />
             </group>
