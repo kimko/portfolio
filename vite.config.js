@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [react()],
   base: '/portfolio/',
   build: {
-    // Single bundle is ~530KB (Chakra UI + Framer Motion + React).
-    // Code-splitting has no benefit for a single-page portfolio.
-    chunkSizeWarningLimit: 600,
+    // The main bundle is ~550KB (Chakra UI + Framer Motion + React).
+    // The 3D Engine chunk (Three.js) is ~1MB, but is safely code-split and lazy-loaded.
+    chunkSizeWarningLimit: 1500,
   },
 })
