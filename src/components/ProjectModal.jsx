@@ -17,16 +17,11 @@ import {
   Button
 } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import { useFBX, Stage, PresentationControls } from '@react-three/drei';
-import { Suspense } from 'react';
+import { Suspense, lazy } from 'react';
+
+const ModelViewer = lazy(() => import('./ModelViewer'));
 
 const MotionBox = motion.create(Box);
-
-function FBXModel({ url }) {
-  const fbx = useFBX(url);
-  return <primitive object={fbx} />;
-}
 
 const InfoIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -238,23 +233,9 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 pb={{ base: "90px", md: "100px" }} // Leave space for thumbnails
               >
                 {currentImage.is3D ? (
-                  <Canvas shadows dpr={[1, 2]} camera={{ fov: 50 }} style={{ width: '100%', height: '100%', flex: 1 }}>
-                    <Suspense fallback={null}>
-                      <PresentationControls 
-                        speed={1.5} 
-                        global 
-                        zoom={1.5} 
-                        polar={[-0.1, Math.PI / 4]}
-                        rotation={[0.15, Math.PI / 4, 0]}
-                      >
-                        <Stage environment="city" intensity={0.6}>
-                          <group rotation={[-Math.PI / 2, 0, 0]}>
-                            <FBXModel url={currentImage.url} />
-                          </group>
-                        </Stage>
-                      </PresentationControls>
-                    </Suspense>
-                  </Canvas>
+                  <Suspense fallback={null}>
+                    <ModelViewer url={currentImage.url} />
+                  </Suspense>
                 ) : (
                   <Image
                     src={currentImage.full}
