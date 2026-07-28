@@ -106,6 +106,19 @@ export default function ProjectModal({ project, isOpen, onClose }) {
     }
   }, [isOpen, isDesktop]);
 
+  // Preload all high-res images for the active project when the modal opens
+  useEffect(() => {
+    if (isOpen && activeProject && activeProject.images) {
+      activeProject.images.forEach((img) => {
+        // We only preload static images, not 3D FBX files
+        if (!img.is3D && img.full) {
+          const image = new window.Image();
+          image.src = img.full;
+        }
+      });
+    }
+  }, [isOpen, activeProject]);
+
   // Reset loaded state when switching images
   useEffect(() => {
     setImageLoaded(false);
