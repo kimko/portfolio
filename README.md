@@ -1,4 +1,4 @@
-# Kopowski Woodworks
+# Woodworks
 
 Woodworking portfolio site featuring an interactive project gallery and inline 3D model viewers.
 

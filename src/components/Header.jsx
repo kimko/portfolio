@@ -20,7 +20,7 @@ export default function Header() {
         textTransform="uppercase"
         color="text.primary"
       >
-        Kopowski Woodworks
+        Woodworks
       </Text>
       <Box
         mx="auto"

@@ -25,7 +25,7 @@ describe('App Routing', () => {
 
   it('renders the main project grid', () => {
     renderWithRouter('/');
-    expect(screen.getByText('Kopowski Woodworks')).toBeDefined();
+    expect(screen.getByText('Woodworks')).toBeDefined();
     expect(screen.getByText('MCM Coffee Table')).toBeDefined();
   });
 
