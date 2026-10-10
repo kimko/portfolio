@@ -11,6 +11,9 @@ vi.mock('../components/ModelViewer', () => ({
   default: () => <div data-testid="mock-model-viewer">3D Model</div>,
 }));
 
+const nightstands = projectsData.find((project) => project.id === 'shaker-nightstands');
+const nightstandPhoto = (position) => nightstands.images[position - 1];
+
 const renderAt = (path) => {
   const memory = memoryLocation({ path, record: true });
   render(
@@ -72,13 +75,13 @@ describe('Project view', () => {
 
   it('leaves pinch-zoom to the browser while a photo is at normal size', async () => {
     renderAt('/project/shaker-nightstands');
-    const photo = await screen.findByRole('img', { name: 'Pair of Shaker-style nightstands' });
+    const photo = await screen.findByRole('img', { name: nightstandPhoto(1).alt });
     expect(photo.parentElement.style.touchAction).toBe('');
   });
 
   it('moves to the next photo on a one-finger swipe left', async () => {
     const memory = renderAt('/project/shaker-nightstands');
-    const photo = await screen.findByRole('img', { name: 'Pair of Shaker-style nightstands' });
+    const photo = await screen.findByRole('img', { name: nightstandPhoto(1).alt });
 
     fireEvent.touchStart(photo.parentElement, { touches: [{ clientX: 300 }], changedTouches: [{ clientX: 300 }] });
     fireEvent.touchEnd(photo.parentElement, { touches: [], changedTouches: [{ clientX: 100 }] });
@@ -88,7 +91,7 @@ describe('Project view', () => {
 
   it('does not change photos during a two-finger pinch', async () => {
     const memory = renderAt('/project/shaker-nightstands');
-    const photo = await screen.findByRole('img', { name: 'Pair of Shaker-style nightstands' });
+    const photo = await screen.findByRole('img', { name: nightstandPhoto(1).alt });
 
     fireEvent.touchStart(photo.parentElement, { touches: [{ clientX: 300 }], changedTouches: [{ clientX: 300 }] });
     fireEvent.touchMove(photo.parentElement, {
@@ -102,17 +105,17 @@ describe('Project view', () => {
 
   it('captions the photo being viewed and follows it to the next photo', async () => {
     renderAt('/project/shaker-nightstands');
-    expect(await screen.findByText('Pair of Shaker-style nightstands')).toBeDefined();
+    expect(await screen.findByText(nightstandPhoto(1).alt)).toBeDefined();
 
     fireEvent.keyDown(window, { key: 'ArrowRight' });
 
-    expect(await screen.findByText('Nightstand detail view')).toBeDefined();
-    expect(screen.queryByText('Pair of Shaker-style nightstands')).toBeNull();
+    expect(await screen.findByText(nightstandPhoto(2).alt)).toBeDefined();
+    expect(screen.queryByText(nightstandPhoto(1).alt)).toBeNull();
   });
 
   it('marks the photo being viewed as current in the photo strip', async () => {
     renderAt('/project/shaker-nightstands/image/3');
-    const current = await screen.findByRole('button', { name: /^Photo 3 of 4/ });
+    const current = await screen.findByRole('button', { name: new RegExp(`^Photo 3 of ${nightstands.images.length}`) });
     expect(current.getAttribute('aria-current')).toBe('true');
   });
 
@@ -124,7 +127,7 @@ describe('Project view', () => {
     fireEvent.click(await screen.findByRole('button', { name: 'Share' }));
 
     await waitFor(() => expect(writeText).toHaveBeenCalledOnce());
-    expect(writeText.mock.calls[0][0]).toMatch(/\/p\/shaker-nightstands\/detail-1\/$/);
+    expect(writeText.mock.calls[0][0]).toMatch(new RegExp(`/p/shaker-nightstands/${nightstandPhoto(2).name}/$`));
     expect(await screen.findByText('Link copied')).toBeDefined();
   });
 

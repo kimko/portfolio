@@ -68,6 +68,16 @@
     "images": [
       {
         "type": "img",
+        "name": "detail-4",
+        "alt": "Nightstand frame with maple panels, assembled on the bench"
+      },
+      {
+        "type": "img",
+        "name": "detail-5",
+        "alt": "Walnut nightstand frame without panels, on the bench"
+      },
+      {
+        "type": "img",
         "name": "hero",
         "alt": "Pair of Shaker-style nightstands"
       },
