@@ -78,5 +78,21 @@
   "dresser/IMG_0514.jpg": {
     "photo": "detail-4",
     "sha1": "ec311959d0b4128d3d9098f25ac94293656d31c4"
+  },
+  "dresser/IMG_0516.jpg": {
+    "photo": "detail-5",
+    "sha1": "4346c42fad7eeb4776b0737b9f28bec4ea05b826"
+  },
+  "dresser/IMG_0300.HEIC": {
+    "photo": "detail-6",
+    "sha1": "8df7ddb4f42bde7e28ad8b324f8e2e8463c346f3"
+  },
+  "dresser/IMG_0363.HEIC": {
+    "photo": "detail-7",
+    "sha1": "bdfc1511d9550eff9f6d2f654e4cd83ec969dc0e"
+  },
+  "dresser/IMG_0517.HEIC": {
+    "photo": "detail-8",
+    "sha1": "9054f2bb8d70a1d204e07642fc69820e1341ca42"
   }
 }

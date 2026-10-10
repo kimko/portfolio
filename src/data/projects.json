@@ -139,13 +139,18 @@
   {
     "id": "dresser",
     "title": "Dresser",
-    "description": "This dresser is my most ambitious project to date and is currently a work in progress. I designed everything from scratch in Fusion 360, working through the engineering challenges of drawer construction, panel alignment, and structural integrity at this scale. The design features multiple drawer configurations and frame-and-panel side construction.",
+    "description": "This dresser is my most ambitious project to date. I designed everything from scratch in Fusion 360, working through the engineering challenges of drawer construction, panel alignment, and structural integrity at this scale. The design features multiple drawer configurations and frame-and-panel side construction.",
     "hero": {
       "type": "img",
-      "name": "detail-4",
-      "alt": "Cherry dresser frame assembled, drawer openings still empty"
+      "name": "detail-5",
+      "alt": "Finished cherry dresser with nine drawers"
     },
     "images": [
+      {
+        "type": "img",
+        "name": "detail-5",
+        "alt": "Finished cherry dresser with nine drawers"
+      },
       {
         "type": "img",
         "name": "detail-4",
@@ -183,6 +188,21 @@
         "type": "img",
         "name": "detail-2",
         "alt": "Dresser construction progress"
+      },
+      {
+        "type": "img",
+        "name": "detail-6",
+        "alt": "Dresser frame in the shop, openings numbered with blue tape"
+      },
+      {
+        "type": "img",
+        "name": "detail-7",
+        "alt": "Plywood drawer boxes test-fitted in the frame, fronts not yet on"
+      },
+      {
+        "type": "img",
+        "name": "detail-8",
+        "alt": "Close-up of the cherry drawer fronts, one drawer pulled open"
       }
     ],
     "materials": [
