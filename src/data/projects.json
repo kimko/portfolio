@@ -214,5 +214,44 @@
       "Frame & Panel",
       "Drawers"
     ]
+  },
+  {
+    "id": "file-cabinet",
+    "title": "File Cabinet",
+    "description": "A simple two-drawer file cabinet. The goal is to reinforce all learnings so far, but become more precise.",
+    "hero": {
+      "type": "img",
+      "name": "hero",
+      "alt": "Fusion 360 render of the file cabinet with both drawers open"
+    },
+    "images": [
+      {
+        "type": "img",
+        "name": "hero",
+        "alt": "Fusion 360 render of the file cabinet with both drawers open"
+      },
+      {
+        "type": "fbx",
+        "file": "file-cabinet.fbx",
+        "thumb": "file-cabinet_preview",
+        "alt": "3D model of the file cabinet"
+      },
+      {
+        "type": "fbx",
+        "file": "file-cabinet-frame.fbx",
+        "thumb": "file-cabinet-frame_preview",
+        "alt": "3D model of the file cabinet frame"
+      },
+      {
+        "type": "img",
+        "name": "detail-1",
+        "alt": "Side panel glued up from three boards, clamped on the bench"
+      }
+    ],
+    "materials": [
+      "Maple",
+      "Sapele"
+    ],
+    "techniques": []
   }
 ]

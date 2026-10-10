@@ -94,5 +94,21 @@
   "dresser/IMG_0517.HEIC": {
     "photo": "detail-8",
     "sha1": "9054f2bb8d70a1d204e07642fc69820e1341ca42"
+  },
+  "file-cabinet/2026-10-10_11-56-26.jpg": {
+    "photo": "hero",
+    "sha1": "5e9f531b6649846ef8294fe6735b2dce3f864191"
+  },
+  "file-cabinet/file-cabinet-preview.png": {
+    "photo": "file-cabinet_preview",
+    "sha1": "0f05d9d2992d3b70eb19b3791d38863e70fb82a0"
+  },
+  "file-cabinet/file-cabinet-frame-preview.png": {
+    "photo": "file-cabinet-frame_preview",
+    "sha1": "ab544e7bb962d1bd79c56d8216dd927379adea14"
+  },
+  "file-cabinet/side-panel-glue-up.HEIC": {
+    "photo": "detail-1",
+    "sha1": "b43a5bba7c47e75d5a82b530acbe5c609010c2f0"
   }
 }

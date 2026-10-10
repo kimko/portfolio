@@ -5,6 +5,7 @@ import { memoryLocation } from 'wouter/memory-location';
 import { ChakraProvider } from '@chakra-ui/react';
 import { AppContent } from '../App';
 import theme from '../theme';
+import projectsData from '../data/projects.json';
 
 vi.mock('../components/ModelViewer', () => ({
   default: () => <div data-testid="mock-model-viewer">3D Model</div>,
@@ -28,11 +29,10 @@ describe('Home page structure', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Woodworks' })).toBeDefined();
   });
 
-  it('lists projects newest first', () => {
+  it('lists projects newest first, with the last one added at the top', () => {
     renderAt('/');
     const titles = screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent);
-    expect(titles.at(0)).toBe('Dresser');
-    expect(titles.at(-1)).toBe('Small Table');
+    expect(titles).toEqual(projectsData.map((project) => project.title).toReversed());
   });
 
   it('shows materials on the cards but leaves techniques for the project details', () => {
