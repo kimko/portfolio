@@ -14,6 +14,7 @@ import {
   nextPhotoName,
   photoKey,
   removePhoto,
+  reorderPhotos,
   replaceProject,
   setAlt,
   setCover,
@@ -217,6 +218,13 @@ export async function setCoverCommand(paths, projectId, name, { dryRun = false }
   const updated = setCover(findProject(state.projects, projectId), name);
   if (!dryRun) await saveState(paths, { ...state, projects: replaceProject(state.projects, updated) });
   return `${name} is now the cover photo of ${projectId}`;
+}
+
+export async function order(paths, projectId, names, { dryRun = false } = {}) {
+  const state = await loadState(paths);
+  const updated = reorderPhotos(findProject(state.projects, projectId), names);
+  if (!dryRun) await saveState(paths, { ...state, projects: replaceProject(state.projects, updated) });
+  return `New order for ${projectId}: ${names.join(', ')}`;
 }
 
 export async function setAltCommand(paths, projectId, name, alt, { dryRun = false } = {}) {

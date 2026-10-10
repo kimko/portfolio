@@ -23,7 +23,8 @@ Change things (add --dry-run to preview)
   add-model <project> <model.fbx> --preview <image> --alt <text>
   skip <project> <file>          Don't offer this dropped photo again
   remove-photo <project> <photo or model.fbx>
-  set-cover <project> <photo>
+  set-cover <project> <photo>   Card image; doesn't change the order
+  order <project> <photo>...    Every photo and model, in the order to show them
   set-alt <project> <photo> <text>
   remove-project <project>
   rebuild [project]              Remake web copies from the originals
@@ -180,6 +181,10 @@ async function main(argv) {
     case 'set-cover': {
       const [id, name] = needs(rest, 2, 'set-cover <project> <photo>');
       return changed(await commands.setCoverCommand(paths, id, name, write));
+    }
+    case 'order': {
+      const [id, ...names] = needs(rest, 2, 'order <project> <photo or model.fbx>...');
+      return changed(await commands.order(paths, id, names, write));
     }
     case 'set-alt': {
       const [id, name, alt] = needs(rest, 3, 'set-alt <project> <photo> <text>');

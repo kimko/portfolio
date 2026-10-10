@@ -6,6 +6,7 @@ import {
   editProject,
   nextPhotoName,
   removePhoto,
+  reorderPhotos,
   setAlt,
   setCover,
 } from '../../scripts/content/projects.mjs';
@@ -61,23 +62,39 @@ describe('cover photo', () => {
     expect(() => removePhoto(bench, 'hero')).toThrow(/set-cover/);
   });
 
-  it('moves a new cover to the front so the project opens on it', () => {
+  it('changes the card image without moving any photos', () => {
     const updated = setCover(bench, 'detail-1');
     expect(updated.hero.name).toBe('detail-1');
-    expect(updated.images[0].name).toBe('detail-1');
-    expect(updated.images).toHaveLength(3);
+    expect(updated.images).toEqual(bench.images);
   });
 
-  it('can add a photo straight in as the cover', () => {
+  it('adds a new cover at the end, leaving the order alone', () => {
     const updated = addPhoto(bench, { name: 'detail-2', alt: 'Glue-up', cover: true });
     expect(updated.hero.name).toBe('detail-2');
-    expect(updated.images.map((image) => image.name ?? image.file)).toEqual(['detail-2', 'hero', 'detail-1', 'bench.fbx']);
+    expect(updated.images.map((image) => image.name ?? image.file)).toEqual(['hero', 'detail-1', 'bench.fbx', 'detail-2']);
   });
 
   it('keeps the cover alt text in step with the photo list', () => {
     const updated = setAlt(bench, 'hero', 'Walnut bench in the living room');
     expect(updated.hero.alt).toBe('Walnut bench in the living room');
     expect(updated.images[0].alt).toBe('Walnut bench in the living room');
+  });
+});
+
+describe('ordering photos', () => {
+  it('puts photos and models in the given order, keeping the cover', () => {
+    const updated = reorderPhotos(bench, ['bench.fbx', 'detail-1', 'hero']);
+    expect(updated.images.map((image) => image.name ?? image.file)).toEqual(['bench.fbx', 'detail-1', 'hero']);
+    expect(updated.hero.name).toBe('hero');
+  });
+
+  it('refuses an order that leaves a photo out, so nothing disappears by accident', () => {
+    expect(() => reorderPhotos(bench, ['bench.fbx', 'hero'])).toThrow(/missing: detail-1/);
+  });
+
+  it('refuses names that are not in the project or are listed twice', () => {
+    expect(() => reorderPhotos(bench, ['hero', 'hero', 'detail-1', 'bench.fbx'])).toThrow(/listed twice: hero/);
+    expect(() => reorderPhotos(bench, ['hero', 'detail-1', 'bench.fbx', 'detail-9'])).toThrow(/not in bench: detail-9/);
   });
 });
 

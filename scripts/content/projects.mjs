@@ -90,11 +90,6 @@ export function nextPhotoName(project, manifestEntries = {}) {
   return `detail-${Math.max(0, ...numbers) + 1}`;
 }
 
-function withCoverFirst(project, cover) {
-  const rest = project.images.filter((image) => image !== cover);
-  return { ...project, hero: cover, images: [cover, ...rest] };
-}
-
 export function addPhoto(project, { name, alt, cover = false }) {
   if (!alt) throw new ContentError('Every photo needs --alt text describing what it shows.');
   if (project.images.some((image) => photoKey(image) === name)) {
@@ -102,13 +97,17 @@ export function addPhoto(project, { name, alt, cover = false }) {
   }
   const photo = { type: 'img', name, alt };
   const updated = { ...project, images: [...project.images, photo] };
-  return cover ? withCoverFirst(updated, photo) : updated;
+  return cover ? { ...updated, hero: photo } : updated;
+}
+
+export function itemName(image) {
+  return image.type === 'fbx' ? image.file : image.name;
 }
 
 export function findPhotoOrModel(project, name) {
-  const item = project.images.find((image) => (image.type === 'fbx' ? image.file : image.name) === name);
+  const item = project.images.find((image) => itemName(image) === name);
   if (!item) {
-    const names = project.images.map((image) => (image.type === 'fbx' ? image.file : image.name));
+    const names = project.images.map(itemName);
     throw new ContentError(`${project.id} has no photo or 3D model called "${name}". It has: ${names.join(', ')}`);
   }
   return item;
@@ -131,7 +130,23 @@ export function removePhoto(project, name) {
 }
 
 export function setCover(project, name) {
-  return withCoverFirst(project, findPhoto(project, name));
+  return { ...project, hero: findPhoto(project, name) };
+}
+
+export function reorderPhotos(project, names) {
+  const current = project.images.map(itemName);
+  const unknown = names.filter((name) => !current.includes(name));
+  const repeated = names.filter((name, index) => names.indexOf(name) !== index);
+  const missing = current.filter((name) => !names.includes(name));
+  if (unknown.length || repeated.length || missing.length) {
+    const problems = [
+      unknown.length && `not in ${project.id}: ${unknown.join(', ')}`,
+      repeated.length && `listed twice: ${repeated.join(', ')}`,
+      missing.length && `missing: ${missing.join(', ')}`,
+    ].filter(Boolean);
+    throw new ContentError(`List every photo and 3D model of ${project.id} exactly once (${problems.join('; ')}).`);
+  }
+  return { ...project, images: names.map((name) => findPhotoOrModel(project, name)) };
 }
 
 export function setAlt(project, name, alt) {
