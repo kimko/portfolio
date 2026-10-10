@@ -1,0 +1,82 @@
+{
+  "small-table/hero.jpg": {
+    "photo": "hero",
+    "sha1": "e75f1e8402e0ec604662b4020517d51c7dbf9012"
+  },
+  "shaker-bench/detail-1.jpg": {
+    "photo": "detail-1",
+    "sha1": "b325670c64b81f200a92db8377bca02f9554da24"
+  },
+  "shaker-bench/hero.jpg": {
+    "photo": "hero",
+    "sha1": "044c5076f0b7cf6574eb31ad39c3c323d6e24865"
+  },
+  "shaker-nightstands/detail-1.jpg": {
+    "photo": "detail-1",
+    "sha1": "4fbb0bace2366f36d3ac76f29dbf88a1ce787365"
+  },
+  "shaker-nightstands/detail-2.jpg": {
+    "photo": "detail-2",
+    "sha1": "13c49f85a5d214af117588f4734218f72da66467"
+  },
+  "shaker-nightstands/detail-3.jpg": {
+    "photo": "detail-3",
+    "sha1": "9efb69e9e05b14fc5ad50beb45b99966935d6fc6"
+  },
+  "shaker-nightstands/hero.jpg": {
+    "photo": "hero",
+    "sha1": "91d890cb72fb475eb144344128ca133f94ba1fbf"
+  },
+  "mcm-coffee-table/detail-1.jpg": {
+    "photo": "detail-1",
+    "sha1": "0c9f74696737ea49594b8f4f93ace827ae3845a3"
+  },
+  "mcm-coffee-table/detail-2.jpg": {
+    "skipped": true,
+    "sha1": "680da5705c6db271c0b859cbc123cd24141709cc"
+  },
+  "mcm-coffee-table/hero.jpg": {
+    "photo": "hero",
+    "sha1": "e61ba0aa5cc663d34b35fb60ebae29ec933369cd"
+  },
+  "mcm-coffee-table/mcm-table_preview.png": {
+    "photo": "mcm-table_preview",
+    "sha1": "30c6df6f8253e18f98e38187bd8d6a5aec1aaf61"
+  },
+  "mcm-coffee-table/table_frame_preview.png": {
+    "photo": "table_frame_preview",
+    "sha1": "69ca88d701810db43a319d9d68e5a83ed78b45cf"
+  },
+  "dresser/detail-1.jpg": {
+    "photo": "detail-1",
+    "sha1": "77c4da8c4149e7eb5ca0c81f895ffca84bd91cd7"
+  },
+  "dresser/detail-2.jpg": {
+    "photo": "detail-2",
+    "sha1": "2b788c0cf0a98bb56782dd6e785e6627f7d5af8a"
+  },
+  "dresser/detail-3.jpg": {
+    "skipped": true,
+    "sha1": "a08c30f40a7a4edb55d7b55b60b5c3ab0593ccf2"
+  },
+  "dresser/dominos_preview.png": {
+    "photo": "dominos_preview",
+    "sha1": "908d6f22195b2f29fed8bb9c5a2c1b76a20db2b8"
+  },
+  "dresser/dresser_frame_preview.png": {
+    "photo": "dresser_frame_preview",
+    "sha1": "6ac688f3052b1089e6d50862c8c5cb85fb4e7c57"
+  },
+  "dresser/dresser_preview.png": {
+    "photo": "dresser_preview",
+    "sha1": "6243165e452b30b2e446d3c66fe28a002b491b87"
+  },
+  "dresser/hero.jpg": {
+    "photo": "hero",
+    "sha1": "a08c30f40a7a4edb55d7b55b60b5c3ab0593ccf2"
+  },
+  "dresser/IMG_0514.jpg": {
+    "photo": "detail-4",
+    "sha1": "ec311959d0b4128d3d9098f25ac94293656d31c4"
+  }
+}

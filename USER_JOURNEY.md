@@ -8,7 +8,7 @@ This document outlines the primary interaction flows for both visitors to the po
 
 ### Discovery
 * **Landing (`/#/`)**: A visitor arrives at the main portfolio URL. They are immediately presented with a responsive, masonry-style grid of woodworking projects.
-* **Loading**: To ensure a premium feel even on slow connections, projects first render an inline blurred placeholder (a tiny 20px base64 string), which seamlessly cross-fades into a high-res (600px width) optimized WebP thumbnail once downloaded.
+* **Loading**: To ensure a premium feel even on slow connections, projects first render an inline blurred placeholder (a tiny 20px base64 string), which seamlessly cross-fades into a 1000px-wide optimized WebP card image once downloaded.
 
 ### Exploration
 * **Selection**: The visitor clicks on a project card (e.g., *MCM Coffee Table*).
@@ -24,19 +24,18 @@ This document outlines the primary interaction flows for both visitors to the po
 
 ## 2. The Administrator Journey (Internal Tooling)
 
-### Project Creation
-* **Completion**: The administrator finishes building a new piece of furniture in the woodshop and decides to add it to the portfolio.
-* **CLI Invocation**: Instead of manually writing JSON objects, the admin runs `npm run manage` in the terminal.
+### Dropping Photos
+* **Completion**: The administrator finishes a piece in the woodshop, or takes new photos of one in progress.
+* **Drop**: They copy the photos straight from the phone (HEIC is fine) into `content/originals/<project-id>/`. A new folder means a new project. `.fbx` models exported from Fusion 360 go in the same folder, with a render to use as the preview.
 
-### Data Entry
-* **Interactive Prompts**: The CLI (powered by Inquirer) asks for the project's internal ID, display title, materials used, techniques applied, and a full text description.
-* **Asset Ingestion**: The admin exports `.jpg` photos from their camera and an `.fbx` file from Fusion 360, placing them into a new directory: `public/images/<project-id>/`.
-* **Registration**: The CLI scans the directory, prompting the admin to identify the "Hero" image, provide alt-text for accessibility, and pair the `.fbx` model with a preview thumbnail.
+### Working with Claude
+* **Status**: Claude Code runs `npm run content -- status` (guided by the `portfolio-content` skill) and reports what's new, for example "3 new photos in dresser".
+* **Review**: Claude looks at each photo, proposes alt text, the cover photo and any to skip, and maps the administrator's tags onto names already used on the site. Descriptions keep the administrator's own words.
+* **Apply**: After a dry run and the administrator's OK, Claude runs `new`, `add-photo`, `add-model`, `edit` or `remove-photo`. Only the project and photos being changed are touched.
 
 ### Optimization Pipeline
-* **Processing**: The CLI automatically triggers the image optimizer script (`npm run optimize`).
-* **Generation**: Using `sharp`, the script chews through the raw source images and generates three tiers of WebP assets per image: a 600px thumbnail, a 1400px full-res version, and a 20px blurred base64 string.
-* **Manifesting**: A JSON manifest is updated linking the assets together.
+* **Generation**: For each new photo the tool converts HEIC with macOS `sips`, then uses `sharp` to make a 1000px-wide card image (WebP, quality 72), a 2400px full image (WebP, quality 75) and a 20px blur placeholder, turned upright and without location data.
+* **Records**: `src/data/image-manifest.json` links each photo to its web copies, and `content/photo-map.json` records which original became which photo so the next `status` knows what's new. Originals stay on the administrator's computer and are not committed.
 
 ### Deployment & CI/CD
 * **Validation**: The admin runs `git commit`. A `husky` pre-commit hook automatically intercepts the commit.

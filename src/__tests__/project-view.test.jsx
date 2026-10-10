@@ -35,6 +35,12 @@ describe('Home page structure', () => {
     expect(titles.at(-1)).toBe('Small Table');
   });
 
+  it('shows materials on the cards but leaves techniques for the project details', () => {
+    renderAt('/');
+    expect(screen.getAllByText('Walnut').length).toBeGreaterThan(0);
+    expect(screen.queryByText('Mortise & Tenon')).toBeNull();
+  });
+
   it('gives every project a heading that links to its page', () => {
     renderAt('/');
     const heading = screen.getByRole('heading', { level: 2, name: 'MCM Coffee Table' });
@@ -92,6 +98,16 @@ describe('Project view', () => {
     fireEvent.touchEnd(photo.parentElement, { touches: [], changedTouches: [{ clientX: 100 }] });
 
     expect(memory.history.at(-1)).toBe('/project/shaker-nightstands');
+  });
+
+  it('captions the photo being viewed and follows it to the next photo', async () => {
+    renderAt('/project/shaker-nightstands');
+    expect(await screen.findByText('Pair of Shaker-style nightstands')).toBeDefined();
+
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+    expect(await screen.findByText('Nightstand detail view')).toBeDefined();
+    expect(screen.queryByText('Pair of Shaker-style nightstands')).toBeNull();
   });
 
   it('marks the photo being viewed as current in the photo strip', async () => {

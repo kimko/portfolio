@@ -11,26 +11,25 @@ npm install
 npm run dev          # http://localhost:5173/portfolio/
 ```
 
-## Project Management CLI
+## Adding and Updating Projects
 
-Instead of manually editing JSON data, the project includes an interactive CLI to add, edit, and remove portfolio projects. 
+Projects are managed with a small command-line tool, designed to be driven by Claude Code (see `.claude/skills/portfolio-content/SKILL.md`) but usable by hand too.
 
 ```bash
-npm run manage
+npm run content -- status      # what's new in content/originals/
+npm run content -- --help      # every command
 ```
-This CLI will prompt you for project details (materials, techniques), scan the project's image directory for new assets or 3D models, update `src/data/projects.json`, and automatically run the optimization pipeline.
+
+1. Drop photos (HEIC or JPEG, any file name) into `content/originals/<project-id>/`. A new folder becomes a new project.
+2. Ask Claude to add them, or run `new`, `add-photo`, `edit`, `remove-photo` and `set-cover` yourself. Every change command takes `--dry-run`.
+3. Run `npm run content -- check` and commit.
 
 ## Asset Pipeline (Images & 3D)
 
-Source assets belong in `public/images/<project-id>/`. 
-
-- **Images**: Place high-res JPEGs/PNGs here. The pipeline generates optimized WebP variants across three tiers: thumb (600px), full (1400px), and a tiny 20px base64 blur placeholder for instant loading.
-- **3D Models**: Place `.fbx` files here alongside a preview thumbnail (e.g. `model.fbx` and `model_preview.jpg`). The app uses Three.js/React-Three-Fiber to render these inline.
-
-To manually run the optimizer:
-```bash
-npm run optimize
-```
+- **Originals** stay on your computer in `content/originals/` (gitignored, so keep your own backup). `content/photo-map.json` records which original became which site photo.
+- **Web copies** in `public/images-optimized/` are committed: a 1000px-wide card image (WebP, quality 72), a 2400px full image (WebP, quality 75) and a 20px blur placeholder. Copies are turned upright and saved without location data.
+- **3D models** (`.fbx`) live in `public/models/<project-id>/`, with a preview image processed like any photo.
+- `npm run content -- rebuild` remakes the web copies from the originals after a size change.
 
 ## Testing & Quality
 

@@ -34,6 +34,11 @@
       "thumb": "images-optimized/dresser/thumb-hero.webp",
       "full": "images-optimized/dresser/full-hero.webp",
       "blur": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAwBACdASoUABQAPzV+t1OvJ6Uit/VYAeAmiUAABIV7Egv484z+ct0BjwAA/uqSPcEYKWnPEYxh3H2+MYzNT0cZRO09mE3OypLLQHramL2QU/Yki1YspWVBHxlVn7cK/S5XqxVSITBUxE13YAA="
+    },
+    "detail-4": {
+      "thumb": "images-optimized/dresser/thumb-detail-4.webp",
+      "full": "images-optimized/dresser/full-detail-4.webp",
+      "blur": "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAADwBACdASoUABUAPzmUwFmvKiajqAgB4CcJZgCsL9SA6JpmQYRGHJqb9cHQKN93H7AA/HgPEwZwooYAXHqGQv/PLMuJJ10XnP95kwC+XUTZghqseoNP/zDHNrCwp0Hjb9EPugHb1GHVwVoZdBYdTuEsPnwM8U6txSzU/8OmJOp9fCwyNYz/XqpQ0zOoM3gKwAAAAA=="
     }
   },
   "mcm-coffee-table": {

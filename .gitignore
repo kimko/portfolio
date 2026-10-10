@@ -25,3 +25,6 @@ dist-ssr
 
 # Scratch files
 tmp/
+
+# Original photos stay on this computer only
+content/originals/

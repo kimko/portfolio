@@ -91,7 +91,7 @@ export default function ProjectCard({ project, index, gridColumn }) {
             {project.title}
           </LinkOverlay>
         </Heading>
-        <ProjectTags materials={project.materials} techniques={project.techniques} />
+        <ProjectTags materials={project.materials} />
       </Box>
     </MotionLinkBox>
   );

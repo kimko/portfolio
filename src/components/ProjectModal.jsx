@@ -87,6 +87,25 @@ const ShareIcon = () => (
   </svg>
 );
 
+function Caption({ children }) {
+  return (
+    <Text
+      aria-hidden="true"
+      flexShrink={0}
+      w="100%"
+      px={3}
+      pt={2}
+      fontSize="sm"
+      lineHeight="1.4"
+      color="night.inkSoft"
+      textAlign="center"
+      noOfLines={2}
+    >
+      {children}
+    </Text>
+  );
+}
+
 const focusRing = { outline: '3px solid', outlineColor: 'accent.ring', outlineOffset: '2px' };
 
 function ProjectDetails({ project }) {
@@ -102,7 +121,7 @@ function ProjectDetails({ project }) {
       <Box w="32px" h="2px" bg="accent.rule" my={6} />
 
       <Text fontSize="md" lineHeight="1.75" maxW="62ch">
-        {project.fullDescription}
+        {project.description}
       </Text>
     </>
   );
@@ -291,9 +310,14 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 minH={0}
               >
                 {currentImage.is3D ? (
-                  <Suspense fallback={<LoadingMessage>Loading 3D viewer</LoadingMessage>}>
-                    <ModelViewer key={currentImage.url} url={currentImage.url} alt={currentImage.alt} />
-                  </Suspense>
+                  <Flex direction="column" position="absolute" inset={0}>
+                    <Box position="relative" flex="1" minH={0}>
+                      <Suspense fallback={<LoadingMessage>Loading 3D viewer</LoadingMessage>}>
+                        <ModelViewer key={currentImage.url} url={currentImage.url} alt={currentImage.alt} />
+                      </Suspense>
+                    </Box>
+                    <Caption>{currentImage.alt}</Caption>
+                  </Flex>
                 ) : (
                   <>
                     {currentImage.blur && (
@@ -323,6 +347,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                         inset={0}
                         p={{ base: 0, md: 4 }}
                         display="flex"
+                        flexDirection="column"
                         alignItems="center"
                         justifyContent="center"
                       >
@@ -337,23 +362,23 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                           animate={{ scale: zoomLevel }}
                           transition={{ duration: 0.3 }}
                           style={{ cursor: zoomLevel > 1 ? 'grab' : 'default' }}
+                          flex="0 1 auto"
+                          minH={0}
                           w="100%"
-                          h="100%"
                           display="flex"
-                          alignItems="center"
-                          justifyContent="center"
                         >
                           <Image
                             src={currentImage.full}
                             alt={currentImage.alt}
-                            maxW="100%"
-                            maxH="100%"
+                            w="100%"
+                            h="100%"
                             objectFit="contain"
                             draggable={false}
                             onLoad={() => setLoadedKey(imageKey)}
                             pointerEvents="none"
                           />
                         </MotionBox>
+                        <Caption>{currentImage.alt}</Caption>
                       </MotionBox>
                     </AnimatePresence>
                   </>
