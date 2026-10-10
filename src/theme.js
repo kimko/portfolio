@@ -1,44 +1,60 @@
 import { extendTheme } from '@chakra-ui/react';
 
+const ring = '#A0640F';
+
 const theme = extendTheme({
   colors: {
-    bg: { primary: '#FAFAFA', secondary: '#F0F0F0', card: '#FFFFFF' },
-    text: { primary: '#1A1A1A', secondary: '#6B6B6B', muted: '#9E9E9E' },
+    paper: '#F7F6F3',
+    ink: '#1C1915',
+    inkSoft: '#5E564D',
+    line: '#E2DDD5',
     accent: {
-      50: '#FFF8E1',
-      100: '#FFECB3',
-      200: '#FFD54F',
-      300: '#FFCA28',
-      400: '#FFC107',
-      500: '#D4A017',
-      600: '#B8860B',
-      700: '#8B6914',
-      800: '#6B4F10',
-      900: '#4A3508',
+      ring,
+      rule: '#B7791F',
+      tagBg: '#F1E4CC',
+      tagInk: '#6A4510',
     },
-    border: { subtle: '#E8E8E8', medium: '#D0D0D0' },
+    night: {
+      bg: '#15130F',
+      panel: '#1D1A16',
+      raised: '#2A2520',
+      hover: '#37302A',
+      line: 'rgba(255, 244, 228, 0.12)',
+      ink: '#F3EEE7',
+      inkSoft: '#B9AFA4',
+      tagBg: '#3A2E1E',
+      tagInk: '#F0C987',
+    },
   },
   fonts: {
-    heading: `'Inter', sans-serif`,
-    body: `'Inter', sans-serif`,
+    heading: `'Zilla Slab', 'Rockwell', Georgia, serif`,
+    body: `'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif`,
+    mono: `'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace`,
+  },
+  shadows: {
+    outline: `0 0 0 3px ${ring}`,
   },
   styles: {
     global: {
       body: {
-        bg: 'bg.primary',
-        color: 'text.primary',
+        bg: 'paper',
+        color: 'ink',
+      },
+      'h1, h2, h3': {
+        textWrap: 'balance',
       },
     },
   },
   components: {
-    Modal: {
-      baseStyle: {
-        overlay: {
-          bg: 'blackAlpha.700',
-          backdropFilter: 'blur(8px)',
-        },
-        dialog: {
-          bg: 'bg.card',
+    Button: {
+      variants: {
+        onDark: {
+          bg: 'night.raised',
+          color: 'night.ink',
+          border: '1px solid',
+          borderColor: 'night.line',
+          _hover: { bg: 'night.hover', _disabled: { bg: 'night.raised' } },
+          _active: { bg: 'night.hover' },
         },
       },
     },

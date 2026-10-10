@@ -21,7 +21,7 @@ function fbx(projectId, fbxName, thumbName, alt) {
   const data = manifest[projectId]?.[thumbName];
   return {
     is3D: true,
-    url: `${base}/images/${projectId}/${fbxName}`,
+    url: `${base}images/${projectId}/${fbxName}`,
     thumb: data ? `${base}${data.thumb}` : '',
     blur: data ? data.blur : undefined,
     alt,
@@ -40,4 +40,4 @@ export const projects = projectsData.map(project => ({
       ? img(project.id, image.name, image.alt)
       : fbx(project.id, image.file, image.thumb, image.alt)
   )
-}));
+})).toReversed();

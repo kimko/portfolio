@@ -1,35 +1,44 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Flex, Heading, Text } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
-const MotionBox = motion.create(Box);
+const MotionFlex = motion.create(Flex);
 
-export default function Header() {
+export default function Header({ projectCount }) {
   return (
-    <MotionBox
-      initial={{ opacity: 0, y: -10 }}
+    <MotionFlex
+      as="header"
+      initial={{ opacity: 0.4, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      textAlign="center"
-      mb={{ base: 10, md: 16 }}
-      pt={{ base: 6, md: 10 }}
+      transition={{ duration: 0.5 }}
+      align="baseline"
+      justify="space-between"
+      gap={4}
+      borderBottom="1px solid"
+      borderColor="line"
+      pt={{ base: 4, md: 6 }}
+      pb={{ base: 3, md: 4 }}
+      mb={{ base: 8, md: 12 }}
     >
-      <Text
-        fontSize={{ base: 'lg', md: 'xl' }}
+      <Heading
+        as="h1"
+        fontSize={{ base: '4xl', md: '6xl' }}
         fontWeight="600"
-        letterSpacing="0.25em"
-        textTransform="uppercase"
-        color="text.primary"
+        letterSpacing="-0.015em"
+        lineHeight="1"
+        color="ink"
       >
         Woodworks
+      </Heading>
+      <Text
+        fontFamily="mono"
+        fontSize="xs"
+        textTransform="uppercase"
+        letterSpacing="0.12em"
+        color="inkSoft"
+        whiteSpace="nowrap"
+      >
+        {projectCount} projects
       </Text>
-      <Box
-        mx="auto"
-        mt={3}
-        w="60px"
-        h="2px"
-        bg="accent.500"
-        borderRadius="full"
-      />
-    </MotionBox>
+    </MotionFlex>
   );
 }

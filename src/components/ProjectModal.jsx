@@ -1,116 +1,171 @@
-import { useState, useEffect, useRef, Suspense, lazy } from 'react';
+import { useState, useEffect, useEffectEvent, useRef, Suspense, lazy } from 'react';
 import {
   Modal,
   ModalOverlay,
   ModalContent,
+  ModalHeader,
   ModalCloseButton,
-  ModalBody,
   Image,
   Text,
   Box,
+  Flex,
+  Grid,
   HStack,
-  Heading,
-  VStack,
-  Wrap,
-  WrapItem,
-  Tag,
   Button,
-  Spinner,
-  useBreakpointValue
+  IconButton,
+  useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useRoute, useLocation } from 'wouter';
+import { useRoute, useLocation, useRouter } from 'wouter';
+import ProjectTags from './ProjectTags';
+import LoadingMessage from './LoadingMessage';
 
 const ModelViewer = lazy(() => import('./ModelViewer'));
 
 const MotionBox = motion.create(Box);
 
-const Loading3D = () => (
-  <VStack justify="center" align="center" h="100%" w="100%" position="absolute" inset={0} zIndex={1} color="whiteAlpha.700">
-    <Spinner size="xl" thickness="3px" color="white" emptyColor="whiteAlpha.200" mb={4} />
-    <Text fontSize="sm" letterSpacing="widest" textTransform="uppercase">Loading 3D Engine</Text>
-  </VStack>
-);
+const SWIPE_DISTANCE = 60;
+const MAX_ZOOM = 3;
+const ZOOM_STEP = 0.5;
 
-const InfoIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10"></circle>
-    <line x1="12" y1="16" x2="12" y2="12"></line>
-    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-  </svg>
-);
+const iconProps = {
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 2,
+  strokeLinecap: 'round',
+  strokeLinejoin: 'round',
+  'aria-hidden': true,
+};
 
 const Icon3D = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+  <svg width="14" height="14" viewBox="0 0 24 24" {...iconProps}>
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+    <line x1="12" y1="22.08" x2="12" y2="12" />
   </svg>
 );
 
 const ImageIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-    <polyline points="21 15 16 10 5 21"></polyline>
+  <svg width="14" height="14" viewBox="0 0 24 24" {...iconProps}>
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+    <circle cx="8.5" cy="8.5" r="1.5" />
+    <polyline points="21 15 16 10 5 21" />
   </svg>
 );
 
 const ZoomInIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    <line x1="11" y1="8" x2="11" y2="14"></line>
-    <line x1="8" y1="11" x2="14" y2="11"></line>
+  <svg width="20" height="20" viewBox="0 0 24 24" {...iconProps}>
+    <circle cx="11" cy="11" r="8" />
+    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    <line x1="11" y1="8" x2="11" y2="14" />
+    <line x1="8" y1="11" x2="14" y2="11" />
   </svg>
 );
 
 const ZoomOutIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    <line x1="8" y1="11" x2="14" y2="11"></line>
+  <svg width="20" height="20" viewBox="0 0 24 24" {...iconProps}>
+    <circle cx="11" cy="11" r="8" />
+    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    <line x1="8" y1="11" x2="14" y2="11" />
   </svg>
 );
 
-export default function ProjectModal({ project, isOpen, onClose }) {
-  const [, setLocation] = useLocation();
-  const [match, params] = useRoute('/project/:id/image/:index');
-  
-  // Derive selectedIndex directly from the URL route
-  const routeIndex = match && params.index ? parseInt(params.index, 10) - 1 : 0;
-  const selectedIndex = project ? Math.max(0, Math.min(routeIndex, project.images.length - 1)) : 0;
+const InfoIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" {...iconProps}>
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="16" x2="12" y2="12" />
+    <line x1="12" y1="8" x2="12.01" y2="8" />
+  </svg>
+);
 
-  // Keep a reference to the active project so the exit animation has data to render
+const ShareIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" {...iconProps}>
+    <path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7" />
+    <polyline points="16 6 12 2 8 6" />
+    <line x1="12" y1="2" x2="12" y2="15" />
+  </svg>
+);
+
+const focusRing = { outline: '3px solid', outlineColor: 'accent.ring', outlineOffset: '2px' };
+
+function ProjectDetails({ project }) {
+  return (
+    <>
+      <ProjectTags
+        tone="dark"
+        size="md"
+        materials={project.materials}
+        techniques={project.techniques}
+      />
+
+      <Box w="32px" h="2px" bg="accent.rule" my={6} />
+
+      <Text fontSize="md" lineHeight="1.75" maxW="62ch">
+        {project.fullDescription}
+      </Text>
+    </>
+  );
+}
+
+export default function ProjectModal({ project, isOpen, onClose }) {
+  const [location, setLocation] = useLocation();
+  const router = useRouter();
+  const [match, params] = useRoute('/project/:id/image/:index');
+  const toast = useToast();
+  const isDesktop = useBreakpointValue({ base: false, md: true });
+
+  const titleRef = useRef(null);
+  const swipeStartX = useRef(null);
+
+  const [showDetails, setShowDetails] = useState(false);
+  const [wasOpen, setWasOpen] = useState(isOpen);
+  if (wasOpen !== isOpen) {
+    setWasOpen(isOpen);
+    if (!isOpen) setShowDetails(false);
+  }
+
   const [prevProject, setPrevProject] = useState(project);
   useEffect(() => {
     if (project) setPrevProject(project);
   }, [project]);
   const activeProject = project || prevProject;
 
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [zoomLevel, setZoomLevel] = useState(1);
-  const isDesktop = useBreakpointValue({ base: false, md: true });
-  const [showInfo, setShowInfo] = useState(false);
-  const initialMount = useRef(true);
+  const imageCount = activeProject?.images.length ?? 0;
+  const routeIndex = match && params.index ? parseInt(params.index, 10) - 1 : 0;
+  const selectedIndex = Math.max(0, Math.min(routeIndex, imageCount - 1));
+  const currentImage = activeProject?.images[selectedIndex];
+  const imageKey = currentImage ? currentImage.url || currentImage.full : null;
 
-  // Initialize info state only on initial mount or when modal opens
+  const [loadedKey, setLoadedKey] = useState(null);
+  const [zoom, setZoom] = useState({ key: null, level: 1 });
+  const imageLoaded = loadedKey === imageKey;
+  const zoomLevel = zoom.key === imageKey ? zoom.level : 1;
+  const changeZoom = (delta) =>
+    setZoom({ key: imageKey, level: Math.min(MAX_ZOOM, Math.max(1, zoomLevel + delta)) });
+
+  const showImage = (index) => {
+    if (!project || index < 0 || index >= imageCount || index === selectedIndex) return;
+    const path = index === 0 ? `/project/${project.id}` : `/project/${project.id}/image/${index + 1}`;
+    setLocation(path, { replace: true });
+  };
+
+  const onArrowKey = useEffectEvent((event) => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    if (event.key === 'ArrowRight') showImage(selectedIndex + 1);
+    if (event.key === 'ArrowLeft') showImage(selectedIndex - 1);
+  });
+
   useEffect(() => {
-    if (isOpen) {
-      if (initialMount.current) {
-        setShowInfo(isDesktop ?? false);
-        initialMount.current = false;
-      }
-    } else {
-      initialMount.current = true;
-    }
-  }, [isOpen, isDesktop]);
+    if (!isOpen) return undefined;
+    const handleKeyDown = (event) => onArrowKey(event);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
 
-  // Preload all high-res images for the active project when the modal opens
   useEffect(() => {
     if (isOpen && activeProject && activeProject.images) {
       activeProject.images.forEach((img) => {
-        // We only preload static images, not 3D FBX files
         if (!img.is3D && img.full) {
           const image = new window.Image();
           image.src = img.full;
@@ -119,346 +174,332 @@ export default function ProjectModal({ project, isOpen, onClose }) {
     }
   }, [isOpen, activeProject]);
 
-  // Reset loaded state when switching images
-  useEffect(() => {
-    setImageLoaded(false);
-    setZoomLevel(1);
-  }, [selectedIndex]);
-
-  const handleIndexChange = (index) => {
-    if (!project) return;
-    if (index === 0) {
-      setLocation(`/project/${project.id}`, { replace: true });
-    } else {
-      setLocation(`/project/${project.id}/image/${index + 1}`, { replace: true });
+  const share = async () => {
+    const url = new URL(router.hrefs(location), window.location.href).toString();
+    const title = `${activeProject.title} · Woodworks`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+        return;
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast({
+        title: 'Link copied',
+        description: currentImage.is3D ? 'It opens on this 3D model.' : 'It opens on this photo.',
+        status: 'success',
+        duration: 3000,
+        position: 'bottom',
+      });
+    } catch {
+      toast({
+        title: "Couldn't copy the link",
+        description: url,
+        status: 'error',
+        duration: 8000,
+        position: 'bottom',
+      });
     }
   };
 
-  const currentImage = activeProject?.images[selectedIndex];
+  const onSwipeStart = (event) => {
+    const isPageZoomed = (window.visualViewport?.scale ?? 1) > 1;
+    swipeStartX.current = event.touches.length === 1 && !isPageZoomed ? event.touches[0].clientX : null;
+  };
+
+  const onSwipeMove = (event) => {
+    if (event.touches.length > 1) swipeStartX.current = null;
+  };
+
+  const onSwipeEnd = (event) => {
+    if (swipeStartX.current === null || zoomLevel > 1) return;
+    const distance = event.changedTouches[0].clientX - swipeStartX.current;
+    swipeStartX.current = null;
+    if (distance < -SWIPE_DISTANCE) showImage(selectedIndex + 1);
+    else if (distance > SWIPE_DISTANCE) showImage(selectedIndex - 1);
+  };
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
       size="full"
-      scrollBehavior="inside"
-      allowPinchZoom={true}
+      allowPinchZoom
+      initialFocusRef={titleRef}
+      closeOnEsc={!showDetails}
+      onEsc={() => setShowDetails(false)}
     >
-      <ModalOverlay bg="black" />
-      <ModalContent bg="black" borderRadius="0" m={0}>
+      <ModalOverlay bg="night.bg" />
+      <ModalContent bg="night.bg" color="night.ink" borderRadius={0} m={0} h="100dvh" overflow="hidden">
         <ModalCloseButton
           size="lg"
-          color="white"
           zIndex={20}
-          top={4}
-          right={4}
-          bg="whiteAlpha.200"
+          top={3}
+          right={3}
           borderRadius="full"
-          _hover={{ bg: 'whiteAlpha.400' }}
+          bg="rgba(21, 19, 15, 0.7)"
+          color="night.ink"
+          _hover={{ bg: 'night.hover' }}
         />
-        
+
         {activeProject && currentImage && (
           <>
-            {/* Info Toggle Button */}
-        <MotionBox 
-          position="absolute" 
-          top={4} 
-          left={4} 
-          zIndex={20}
-          animate={!showInfo ? { 
-            boxShadow: ["0px 0px 0px 0px rgba(255,255,255,0.4)", "0px 0px 0px 10px rgba(255,255,255,0)", "0px 0px 0px 0px rgba(255,255,255,0)"] 
-          } : {}}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          borderRadius="full"
-        >
-          <Button
-            leftIcon={<InfoIcon />}
-            onClick={() => setShowInfo(!showInfo)}
-            borderRadius="full"
-            bg={showInfo ? "white" : "rgba(20, 20, 20, 0.6)"}
-            color={showInfo ? "black" : "white"}
-            backdropFilter="blur(10px)"
-            border="1px solid"
-            borderColor={showInfo ? "white" : "whiteAlpha.300"}
-            _hover={{ bg: showInfo ? "white" : "whiteAlpha.400" }}
-            size="md"
-            px={5}
-          >
-            {showInfo ? "Hide Details" : "Project Info"}
-          </Button>
-        </MotionBox>
-
-        {/* Zoom Controls (Desktop only, Images only) */}
-        {isDesktop && !currentImage.is3D && (
-          <HStack position="absolute" top={4} left="50%" transform="translateX(-50%)" zIndex={20} spacing={4}>
-            <Button
-              onClick={() => setZoomLevel(z => Math.max(z - 0.5, 1))}
-              bg="rgba(20, 20, 20, 0.6)"
-              color="white"
-              backdropFilter="blur(10px)"
-              border="1px solid"
-              borderColor="whiteAlpha.300"
-              _hover={{ bg: "whiteAlpha.400" }}
-              borderRadius="full"
-              w="56px"
-              h="56px"
+            <ModalHeader
+              ref={titleRef}
+              as="h2"
+              tabIndex={-1}
+              position="absolute"
+              top={3}
+              left={3}
+              zIndex={20}
               p={0}
-              isDisabled={zoomLevel === 1}
-              aria-label="Zoom Out"
+              maxW="calc(100% - 88px)"
+              _focus={{ outline: 'none' }}
             >
-              <ZoomOutIcon />
-            </Button>
-            <Button
-              onClick={() => setZoomLevel(z => Math.min(z + 0.5, 3))}
-              bg="rgba(20, 20, 20, 0.6)"
-              color="white"
-              backdropFilter="blur(10px)"
-              border="1px solid"
-              borderColor="whiteAlpha.300"
-              _hover={{ bg: "whiteAlpha.400" }}
-              borderRadius="full"
-              w="56px"
-              h="56px"
-              p={0}
-              isDisabled={zoomLevel >= 3}
-              aria-label="Zoom In"
-            >
-              <ZoomInIcon />
-            </Button>
-          </HStack>
-        )}
-
-        <ModalBody p={0} display="flex" flexDirection="column" h="100vh" overflow="hidden" position="relative">
-          
-          {/* Info Panel Overlay */}
-          <AnimatePresence>
-            {showInfo && (
-              <MotionBox
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.3 }}
-                position="absolute"
-                top={{ base: "80px", md: 20 }}
-                left={4}
-                w={{ base: "calc(100% - 32px)", md: "400px" }}
-                maxH="calc(100vh - 120px)"
-                bg="rgba(20, 20, 20, 0.85)"
-                backdropFilter="blur(16px)"
-                borderRadius="16px"
-                p={6}
-                zIndex={15}
-                border="1px solid"
-                borderColor="whiteAlpha.200"
-                overflowY="auto"
-                sx={{
-                  '&::-webkit-scrollbar': { width: '4px' },
-                  '&::-webkit-scrollbar-thumb': { bg: 'whiteAlpha.300', borderRadius: 'full' },
-                }}
+              <Button
+                variant="onDark"
+                borderRadius="full"
+                bg="rgba(21, 19, 15, 0.7)"
+                maxW="100%"
+                rightIcon={<InfoIcon />}
+                onClick={() => setShowDetails((open) => !open)}
+                aria-expanded={showDetails}
+                aria-controls="project-details"
+                fontFamily="heading"
+                fontSize="md"
+                fontWeight="600"
               >
-                <Heading as="h2" fontSize="2xl" color="white" mb={2}>
+                <Box as="span" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
                   {activeProject.title}
-                </Heading>
-                
-                <VStack align="start" spacing={3} mb={6}>
-                  {activeProject.materials && activeProject.materials.length > 0 && (
-                    <Wrap spacing={2}>
-                      {activeProject.materials.map((mat) => (
-                        <WrapItem key={mat}>
-                          <Tag size="md" variant="subtle" colorScheme="orange" borderRadius="sm">
-                            {mat}
-                          </Tag>
-                        </WrapItem>
-                      ))}
-                    </Wrap>
-                  )}
-                  
-                  {activeProject.techniques && activeProject.techniques.length > 0 && (
-                    <Wrap spacing={2}>
-                      {activeProject.techniques.map((tech) => (
-                        <WrapItem key={tech}>
-                          <Tag size="md" bg="whiteAlpha.200" color="whiteAlpha.800" borderRadius="sm">
-                            {tech}
-                          </Tag>
-                        </WrapItem>
-                      ))}
-                    </Wrap>
-                  )}
-                </VStack>
+                </Box>
+              </Button>
+            </ModalHeader>
 
-                <Box w="40px" h="2px" bg="accent.500" borderRadius="full" mb={4} />
-                
-                <Text color="whiteAlpha.800" lineHeight="1.8" fontSize="md">
-                  {activeProject.fullDescription}
-                </Text>
-              </MotionBox>
-            )}
-          </AnimatePresence>
-
-          {/* Main Image Area */}
-          <Box
-            flex="1"
-            position="relative"
-            w="100%"
-            bg="black"
-          >
-            {/* Blur placeholder */}
-            {currentImage.blur && (
-              <Image
-                src={currentImage.blur}
-                alt=""
-                aria-hidden="true"
-                position="absolute"
-                top="50%"
-                left="50%"
-                transform="translate(-50%, -50%) scale(1.1)"
-                w="100%"
-                h="100%"
-                objectFit="contain"
-                filter="blur(20px)"
-                opacity={imageLoaded ? 0 : 0.5}
-                transition="opacity 0.4s ease"
-                zIndex={1}
-                pointerEvents="none"
-              />
-            )}
-
-            {/* Full-size image or 3D Model */}
-            <AnimatePresence mode="wait">
-              <MotionBox
-                key={currentImage.url || currentImage.full}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: imageLoaded || currentImage.is3D ? 1 : 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                position="absolute"
-                inset={0}
-                w="100%"
-                h="100%"
-                display="flex"
-                alignItems={currentImage.is3D ? "stretch" : "center"}
-                justifyContent="center"
-                zIndex={2}
-                p={{ base: 0, md: 8 }}
-                pb={{ base: "90px", md: "100px" }} // Leave space for thumbnails
+            <Grid
+              h="100%"
+              templateColumns={showDetails && isDesktop ? 'minmax(0, 1fr) 380px' : 'minmax(0, 1fr)'}
+              templateRows="minmax(0, 1fr) auto"
+              templateAreas={showDetails && isDesktop ? `"media details" "strip details"` : `"media" "strip"`}
+            >
+              <Box
+                gridArea="media"
+                position="relative"
+                overflow="hidden"
+                minH={0}
               >
                 {currentImage.is3D ? (
-                  <Suspense fallback={<Loading3D />}>
-                    <ModelViewer url={currentImage.url} />
+                  <Suspense fallback={<LoadingMessage>Loading 3D viewer</LoadingMessage>}>
+                    <ModelViewer key={currentImage.url} url={currentImage.url} alt={currentImage.alt} />
                   </Suspense>
                 ) : (
-                  <MotionBox
-                    w="100%"
-                    h="100%"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <MotionBox
-                      drag={zoomLevel > 1}
-                      dragConstraints={{ left: -300, right: 300, top: -300, bottom: 300 }}
-                      dragElastic={0.1}
-                      animate={{ scale: zoomLevel }}
-                      transition={{ duration: 0.3 }}
-                      style={{ cursor: zoomLevel > 1 ? 'grab' : 'default' }}
-                      w="100%"
-                      h="100%"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
+                  <>
+                    {currentImage.blur && (
                       <Image
-                        src={currentImage.full}
-                        alt={currentImage.alt}
-                        maxW="100%"
-                        maxH="100%"
+                        src={currentImage.blur}
+                        alt=""
+                        aria-hidden="true"
+                        position="absolute"
+                        inset={0}
+                        w="100%"
+                        h="100%"
                         objectFit="contain"
-                        onLoad={() => setImageLoaded(true)}
+                        filter="blur(20px)"
+                        opacity={imageLoaded ? 0 : 0.5}
+                        transition="opacity 0.4s ease"
                         pointerEvents="none"
                       />
-                    </MotionBox>
-                  </MotionBox>
+                    )}
+                    <AnimatePresence mode="wait" initial={false}>
+                      <MotionBox
+                        key={imageKey}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: imageLoaded ? 1 : 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        position="absolute"
+                        inset={0}
+                        p={{ base: 0, md: 4 }}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <MotionBox
+                          key={zoomLevel > 1 ? 'zoomed' : 'fit'}
+                          drag={zoomLevel > 1}
+                          dragConstraints={{ left: -300, right: 300, top: -300, bottom: 300 }}
+                          dragElastic={0.1}
+                          onTouchStart={onSwipeStart}
+                          onTouchMove={onSwipeMove}
+                          onTouchEnd={onSwipeEnd}
+                          animate={{ scale: zoomLevel }}
+                          transition={{ duration: 0.3 }}
+                          style={{ cursor: zoomLevel > 1 ? 'grab' : 'default' }}
+                          w="100%"
+                          h="100%"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <Image
+                            src={currentImage.full}
+                            alt={currentImage.alt}
+                            maxW="100%"
+                            maxH="100%"
+                            objectFit="contain"
+                            draggable={false}
+                            onLoad={() => setLoadedKey(imageKey)}
+                            pointerEvents="none"
+                          />
+                        </MotionBox>
+                      </MotionBox>
+                    </AnimatePresence>
+                  </>
                 )}
-              </MotionBox>
-            </AnimatePresence>
-          </Box>
 
-          {/* Thumbnail Strip (Bottom overlay) */}
-          <Box 
-            position="absolute" 
-            bottom={{ base: 4, md: 8 }} 
-            left="0" 
-            right="0" 
-            zIndex={10}
-            display="flex"
-            justifyContent="center"
-          >
-            <HStack
-              spacing={3}
-              px={4}
-              py={3}
-              bg="rgba(20, 20, 20, 0.6)"
-              backdropFilter="blur(10px)"
-              borderRadius="16px"
-              border="1px solid"
-              borderColor="whiteAlpha.200"
-              maxW="90vw"
-              overflowX="auto"
-              sx={{
-                '&::-webkit-scrollbar': { display: 'none' },
-              }}
-            >
-              {activeProject.images.map((img, index) => (
-                <Box
-                  key={img.url || img.full}
-                  as="button"
-                  flexShrink={0}
-                  w="60px"
-                  h="60px"
-                  borderRadius="8px"
-                  overflow="hidden"
-                  position="relative"
-                  border="2px solid"
-                  borderColor={
-                    index === selectedIndex ? 'white' : 'transparent'
-                  }
-                  opacity={index === selectedIndex ? 1 : 0.5}
-                  transition="all 0.2s ease"
-                  _hover={{ opacity: 1, borderColor: index === selectedIndex ? 'white' : 'whiteAlpha.500' }}
-                  onClick={() => handleIndexChange(index)}
-                  aria-label={`View image ${index + 1}: ${img.alt}`}
-                  bg="black"
-                  backgroundImage={img.blur ? `url(${img.blur})` : undefined}
-                  backgroundSize="cover"
-                  backgroundPosition="center"
+                <AnimatePresence>
+                  {showDetails && !isDesktop && (
+                    <MotionBox
+                      id="project-details"
+                      initial={{ y: '100%' }}
+                      animate={{ y: 0 }}
+                      exit={{ y: '100%' }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                      position="absolute"
+                      left={0}
+                      right={0}
+                      bottom={0}
+                      maxH="60%"
+                      overflowY="auto"
+                      zIndex={10}
+                      bg="night.panel"
+                      borderTopRadius="16px"
+                      borderTop="1px solid"
+                      borderColor="night.line"
+                      px={5}
+                      pt={5}
+                      pb={6}
+                    >
+                      <ProjectDetails project={activeProject} />
+                    </MotionBox>
+                  )}
+                </AnimatePresence>
+              </Box>
+
+              <Flex
+                gridArea="strip"
+                align="center"
+                gap={3}
+                px={{ base: 3, md: 6 }}
+                py={3}
+                borderTop="1px solid"
+                borderColor="night.line"
+              >
+                <HStack
+                  as="ul"
+                  listStyleType="none"
+                  aria-label="Photos and 3D models"
+                  spacing={2}
+                  flex="1"
+                  minW={0}
+                  overflowX="auto"
+                  p="4px"
+                  sx={{ scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}
                 >
-                  <Image
-                    src={img.thumb}
-                    alt={img.alt}
-                    w="100%"
-                    h="100%"
-                    objectFit="cover"
-                  />
-                  
-                  {/* Indicator Overlay */}
-                  <Box 
-                    position="absolute" 
-                    bottom="2px" 
-                    right="2px" 
-                    bg="rgba(0,0,0,0.6)" 
-                    p="2px" 
-                    borderRadius="4px"
-                    backdropFilter="blur(4px)"
-                    color="white"
-                  >
-                    {img.is3D ? <Icon3D /> : <ImageIcon />}
-                  </Box>
-                </Box>
-              ))}
-            </HStack>
-          </Box>
-        </ModalBody>
-        </>
+                  {activeProject.images.map((img, index) => {
+                    const isSelected = index === selectedIndex;
+                    return (
+                      <Box as="li" key={img.url || img.full} flexShrink={0}>
+                        <Box
+                          as="button"
+                          type="button"
+                          display="block"
+                          w="56px"
+                          h="56px"
+                          borderRadius="4px"
+                          overflow="hidden"
+                          position="relative"
+                          border="2px solid"
+                          borderColor={isSelected ? 'night.ink' : 'transparent'}
+                          opacity={isSelected ? 1 : 0.55}
+                          transition="opacity 0.2s ease, border-color 0.2s ease"
+                          _hover={{ opacity: 1 }}
+                          _focusVisible={{ ...focusRing, opacity: 1 }}
+                          onClick={() => showImage(index)}
+                          aria-label={`${img.is3D ? '3D model' : 'Photo'} ${index + 1} of ${imageCount}: ${img.alt}`}
+                          aria-current={isSelected ? 'true' : undefined}
+                          bg="night.raised"
+                          backgroundImage={img.blur ? `url(${img.blur})` : undefined}
+                          backgroundSize="cover"
+                          backgroundPosition="center"
+                        >
+                          <Image src={img.thumb} alt="" w="100%" h="100%" objectFit="cover" />
+                          <Box
+                            position="absolute"
+                            bottom="2px"
+                            right="2px"
+                            bg="rgba(0, 0, 0, 0.6)"
+                            p="2px"
+                            borderRadius="3px"
+                            color="white"
+                          >
+                            {img.is3D ? <Icon3D /> : <ImageIcon />}
+                          </Box>
+                        </Box>
+                      </Box>
+                    );
+                  })}
+                </HStack>
+
+                <HStack spacing={2} flexShrink={0}>
+                  {isDesktop && !currentImage.is3D && (
+                    <>
+                      <IconButton
+                        variant="onDark"
+                        isRound
+                        icon={<ZoomOutIcon />}
+                        aria-label="Zoom out"
+                        onClick={() => changeZoom(-ZOOM_STEP)}
+                        isDisabled={zoomLevel === 1}
+                      />
+                      <IconButton
+                        variant="onDark"
+                        isRound
+                        icon={<ZoomInIcon />}
+                        aria-label="Zoom in"
+                        onClick={() => changeZoom(ZOOM_STEP)}
+                        isDisabled={zoomLevel >= MAX_ZOOM}
+                      />
+                    </>
+                  )}
+                  <Button variant="onDark" borderRadius="full" leftIcon={<ShareIcon />} onClick={share}>
+                    Share
+                  </Button>
+                </HStack>
+              </Flex>
+
+              {showDetails && isDesktop && (
+                <MotionBox
+                  id="project-details"
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.25 }}
+                  gridArea="details"
+                  bg="night.panel"
+                  borderLeft="1px solid"
+                  borderColor="night.line"
+                  overflowY="auto"
+                  px={8}
+                  pt={20}
+                  pb={8}
+                >
+                  <ProjectDetails project={activeProject} />
+                </MotionBox>
+              )}
+            </Grid>
+          </>
         )}
       </ModalContent>
     </Modal>

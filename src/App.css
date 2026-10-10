@@ -1,4 +1,3 @@
-/* Reset and global styles */
 *,
 *::before,
 *::after {
@@ -13,13 +12,25 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth image loading */
 img {
   display: block;
   max-width: 100%;
 }
 
-/* Remove default focus outline, Chakra handles focus styles */
 :focus:not(:focus-visible) {
   outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

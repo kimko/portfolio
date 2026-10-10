@@ -7,34 +7,42 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="KW" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Woodworks - woodworking portfolio" />
-    <meta name="theme-color" content="#FAFAFA" />
+    <meta name="description" content="Woodworking portfolio: tables, benches, nightstands and a dresser, with build photos and 3D models." />
+    <meta name="theme-color" content="#F7F6F3" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Woodworks" />
+    <meta property="og:title" content="Woodworks" />
+    <meta property="og:description" content="Woodworking portfolio: tables, benches, nightstands and a dresser, with build photos and 3D models." />
+    <meta property="og:url" content="https://kimko.github.io/portfolio/" />
+    <meta property="og:image" content="https://kimko.github.io/portfolio/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Walnut and maple Shaker-style nightstand in the shop" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Zilla+Slab:wght@500;600&display=swap" rel="stylesheet" />
     <title>Woodworks - Woodworking Portfolio</title>
     <style>
-      /* Initial loading indicator - pure CSS, shown before React mounts */
       #app-loader {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         min-height: 100vh;
-        background: #FAFAFA;
-        font-family: 'Inter', sans-serif;
+        background: #F7F6F3;
+        font-family: 'Zilla Slab', Georgia, serif;
       }
       #app-loader .loader-text {
-        font-size: 14px;
-        letter-spacing: 0.25em;
-        text-transform: uppercase;
-        color: #9E9E9E;
+        font-size: 20px;
+        font-weight: 600;
+        color: #5E564D;
         margin-bottom: 24px;
       }
       #app-loader .loader-bar {
         width: 60px;
         height: 2px;
-        background: #E8E8E8;
+        background: #E2DDD5;
         border-radius: 2px;
         overflow: hidden;
         position: relative;
@@ -46,9 +54,12 @@
         left: -60px;
         width: 60px;
         height: 100%;
-        background: #D4A017;
+        background: #A0640F;
         border-radius: 2px;
         animation: loader-slide 1.2s ease-in-out infinite;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #app-loader .loader-bar::after { animation: none; left: 0; }
       }
       @keyframes loader-slide {
         0% { left: -60px; }
@@ -59,7 +70,6 @@
   </head>
   <body>
     <div id="root">
-      <!-- Shown instantly while JS loads. React replaces this on mount. -->
       <div id="app-loader">
         <div class="loader-text">Woodworks</div>
         <div class="loader-bar"></div>

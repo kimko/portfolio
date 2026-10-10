@@ -1,31 +1,22 @@
 import { useState } from 'react';
-import { Box, Image, Text, VStack, Center, Wrap, WrapItem, Tag } from '@chakra-ui/react';
+import { Box, Image, Heading, LinkBox, LinkOverlay, Center } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { Link } from 'wouter';
+import ProjectTags from './ProjectTags';
 
-const MotionBox = motion.create(Box);
+const MotionLinkBox = motion.create(LinkBox);
 
 function ImagePlaceholder() {
-  return (
-    <Center
-      w="100%"
-      h="100%"
-      bgGradient="linear(135deg, #E8DCC8 0%, #D4C4A8 50%, #C4B090 100%)"
-    >
-      <Box color="whiteAlpha.700" fontSize="4xl">
-        🪵
-      </Box>
-    </Center>
-  );
+  return <Center w="100%" h="100%" bgGradient="linear(135deg, #E8DCC8 0%, #D4C4A8 50%, #C4B090 100%)" />;
 }
 
-export default function ProjectCard({ project, index, onClick }) {
+export default function ProjectCard({ project, index, gridColumn }) {
   const [loaded, setLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
 
   const hero = project.hero;
 
   const prefetchAssets = () => {
-    // Silently prefetch the high-res hero image so the modal loads instantly
     if (hero && hero.thumb) {
       const img = new window.Image();
       img.src = hero.thumb;
@@ -33,62 +24,53 @@ export default function ProjectCard({ project, index, onClick }) {
   };
 
   return (
-    <MotionBox
-      initial={{ opacity: 0, y: 30 }}
+    <MotionLinkBox
+      as="li"
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      bg="bg.card"
-      borderRadius="12px"
-      border="1px solid"
-      borderColor="border.subtle"
-      overflow="hidden"
-      cursor="pointer"
-      as="button"
-      textAlign="left"
-      w="100%"
+      transition={{ duration: 0.45, delay: index * 0.08 }}
+      gridColumn={gridColumn}
       onMouseEnter={prefetchAssets}
       onTouchStart={prefetchAssets}
-      onClick={onClick}
-      _hover={{
-        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.08)',
-        transform: 'translateY(-4px)',
-      }}
-      _focusVisible={{
-        outline: '3px solid #E8DCC8',
-        outlineOffset: '2px',
-        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.08)',
-      }}
       sx={{
-        transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+        '.card-media img': { transition: 'transform 0.5s ease, opacity 0.5s ease' },
+        '&:hover .card-media img:not([aria-hidden])': { transform: 'scale(1.025)' },
+        '&:has(a:focus-visible) .card-media': {
+          outline: '3px solid',
+          outlineColor: 'accent.ring',
+          outlineOffset: '3px',
+        },
       }}
     >
-      {/* Image container with blur-up loading */}
-      <Box overflow="hidden" position="relative" h={{ base: '220px', md: '250px' }}>
+      <Box
+        className="card-media"
+        overflow="hidden"
+        position="relative"
+        h={{ base: '240px', md: '280px' }}
+        borderRadius="4px"
+        bg="line"
+      >
         {imgError ? (
           <ImagePlaceholder />
         ) : (
           <>
-            {/* Blur placeholder - an actual img element using the base64 data URI */}
             {hero.blur && (
               <Image
                 src={hero.blur}
                 alt=""
                 aria-hidden="true"
                 position="absolute"
-                top={0}
-                left={0}
+                inset={0}
                 w="100%"
                 h="100%"
                 objectFit="cover"
                 filter="blur(20px)"
                 transform="scale(1.2)"
                 opacity={loaded ? 0 : 1}
-                transition="opacity 0.5s ease"
                 zIndex={1}
                 pointerEvents="none"
               />
             )}
-            {/* Real thumbnail - fades in when loaded */}
             <Image
               src={hero.thumb}
               alt={hero.alt}
@@ -96,61 +78,21 @@ export default function ProjectCard({ project, index, onClick }) {
               h="100%"
               objectFit="cover"
               opacity={loaded ? 1 : 0}
-              transition="opacity 0.5s ease"
               onLoad={() => setLoaded(true)}
               onError={() => setImgError(true)}
             />
           </>
         )}
-        {/* Gradient overlay for depth */}
-        <Box
-          position="absolute"
-          bottom={0}
-          left={0}
-          right={0}
-          h="40px"
-          bgGradient="linear(to-t, blackAlpha.100, transparent)"
-          zIndex={2}
-        />
       </Box>
 
-      {/* Content */}
-      <VStack align="start" spacing={3} p={5}>
-        <Text
-          fontSize={{ base: 'md', md: 'lg' }}
-          fontWeight="600"
-          color="text.primary"
-          lineHeight="1.3"
-        >
-          {project.title}
-        </Text>
-
-        <VStack align="start" spacing={2} w="100%">
-          {project.materials && project.materials.length > 0 && (
-            <Wrap spacing={2}>
-              {project.materials.map((mat) => (
-                <WrapItem key={mat}>
-                  <Tag size="sm" variant="subtle" colorScheme="orange" borderRadius="sm">
-                    {mat}
-                  </Tag>
-                </WrapItem>
-              ))}
-            </Wrap>
-          )}
-          
-          {project.techniques && project.techniques.length > 0 && (
-            <Wrap spacing={2}>
-              {project.techniques.map((tech) => (
-                <WrapItem key={tech}>
-                  <Tag size="sm" bg="gray.100" color="gray.600" borderRadius="sm">
-                    {tech}
-                  </Tag>
-                </WrapItem>
-              ))}
-            </Wrap>
-          )}
-        </VStack>
-      </VStack>
-    </MotionBox>
+      <Box pt={4}>
+        <Heading as="h2" fontSize={{ base: 'xl', md: '2xl' }} fontWeight="600" lineHeight="1.2" color="ink" mb={3}>
+          <LinkOverlay as={Link} href={`/project/${project.id}`} _focusVisible={{ outline: 'none' }}>
+            {project.title}
+          </LinkOverlay>
+        </Heading>
+        <ProjectTags materials={project.materials} techniques={project.techniques} />
+      </Box>
+    </MotionLinkBox>
   );
 }
