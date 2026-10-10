@@ -106,11 +106,6 @@
     },
     "images": [
       {
-        "type": "img",
-        "name": "hero",
-        "alt": "MCM coffee table in living space"
-      },
-      {
         "type": "fbx",
         "file": "mcm-table.fbx",
         "thumb": "mcm-table_preview",
@@ -121,6 +116,11 @@
         "file": "table_frame.fbx",
         "thumb": "table_frame_preview",
         "alt": "MCM Coffee Table Frame 3D Model"
+      },
+      {
+        "type": "img",
+        "name": "hero",
+        "alt": "MCM coffee table in living space"
       },
       {
         "type": "img",
@@ -146,16 +146,6 @@
       "alt": "Finished cherry dresser with nine drawers"
     },
     "images": [
-      {
-        "type": "img",
-        "name": "detail-5",
-        "alt": "Finished cherry dresser with nine drawers"
-      },
-      {
-        "type": "img",
-        "name": "detail-4",
-        "alt": "Cherry dresser frame assembled, drawer openings still empty"
-      },
       {
         "type": "img",
         "name": "hero",
@@ -198,6 +188,16 @@
         "type": "img",
         "name": "detail-7",
         "alt": "Plywood drawer boxes test-fitted in the frame, fronts not yet on"
+      },
+      {
+        "type": "img",
+        "name": "detail-4",
+        "alt": "Cherry dresser frame assembled, drawer openings still empty"
+      },
+      {
+        "type": "img",
+        "name": "detail-5",
+        "alt": "Finished cherry dresser with nine drawers"
       },
       {
         "type": "img",
