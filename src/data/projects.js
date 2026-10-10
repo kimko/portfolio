@@ -6,9 +6,10 @@ const base = import.meta.env.BASE_URL;
 function img(projectId, imageName, alt) {
   const data = manifest[projectId]?.[imageName];
   if (!data) {
-    return { thumb: '', full: '', blur: '', alt };
+    return { key: imageName, thumb: '', full: '', blur: '', alt };
   }
   return {
+    key: imageName,
     thumb: `${base}${data.thumb}`,
     full: `${base}${data.full}`,
     blur: data.blur,
@@ -20,6 +21,7 @@ function img(projectId, imageName, alt) {
 function fbx(projectId, fbxName, thumbName, alt) {
   const data = manifest[projectId]?.[thumbName];
   return {
+    key: thumbName,
     is3D: true,
     url: `${base}models/${projectId}/${fbxName}`,
     thumb: data ? `${base}${data.thumb}` : '',

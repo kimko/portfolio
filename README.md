@@ -31,6 +31,10 @@ npm run content -- --help      # every command
 - **3D models** (`.fbx`) live in `public/models/<project-id>/`, with a preview image processed like any photo.
 - `npm run content -- rebuild` remakes the web copies from the originals after a size change.
 
+## Link Previews
+
+iMessage, Slack and other apps build a link preview from the tags in a page's head; they don't run JavaScript and ignore everything after `#`. So `npm run build` also runs `scripts/share-pages.mjs`, which writes a small page per project (`/portfolio/p/<project>/`) and per photo (`/portfolio/p/<project>/<photo>/`) with its own title, caption and 1200x630 preview image, then forwards to the project view. The Share button shares these addresses. The site-wide preview for the plain address comes from `index.html` and `public/og-image.jpg`.
+
 ## Testing & Quality
 
 - **Tests**: Run `npm test` (or `npm run test:watch`). We use `vitest` and `@testing-library/react` to guarantee routing and modal behaviors don't regress.

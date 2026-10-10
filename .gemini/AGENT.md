@@ -51,6 +51,10 @@ Use the `portfolio-content` skill (`.claude/skills/portfolio-content/SKILL.md`).
 
 Never hand-edit `projects.json` or `image-manifest.json`.
 
+## Link Previews
+
+iMessage, Slack and other apps build a link preview from the tags in a page's head; they don't run JavaScript and ignore everything after `#`. So `npm run build` also runs `scripts/share-pages.mjs`, which writes a small page per project (`/portfolio/p/<project>/`) and per photo (`/portfolio/p/<project>/<photo>/`) with its own title, caption and 1200x630 preview image, then forwards to the project view. The Share button shares these addresses. The site-wide preview for the plain address comes from `index.html` and `public/og-image.jpg`.
+
 ## Commands
 
 ```bash

@@ -17,7 +17,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useRoute, useLocation, useRouter } from 'wouter';
+import { useRoute, useLocation } from 'wouter';
 import ProjectTags from './ProjectTags';
 import LoadingMessage from './LoadingMessage';
 
@@ -128,8 +128,7 @@ function ProjectDetails({ project }) {
 }
 
 export default function ProjectModal({ project, isOpen, onClose }) {
-  const [location, setLocation] = useLocation();
-  const router = useRouter();
+  const [, setLocation] = useLocation();
   const [match, params] = useRoute('/project/:id/image/:index');
   const toast = useToast();
   const isDesktop = useBreakpointValue({ base: false, md: true });
@@ -194,7 +193,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
   }, [isOpen, activeProject]);
 
   const share = async () => {
-    const url = new URL(router.hrefs(location), window.location.href).toString();
+    const url = new URL(`${import.meta.env.BASE_URL}p/${activeProject.id}/${currentImage.key}/`, window.location.origin).toString();
     const title = `${activeProject.title} · Woodworks`;
     if (navigator.share) {
       try {

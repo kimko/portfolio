@@ -124,7 +124,7 @@ describe('Project view', () => {
     fireEvent.click(await screen.findByRole('button', { name: 'Share' }));
 
     await waitFor(() => expect(writeText).toHaveBeenCalledOnce());
-    expect(writeText.mock.calls[0][0]).toMatch(/\/project\/shaker-nightstands\/image\/2$/);
+    expect(writeText.mock.calls[0][0]).toMatch(/\/p\/shaker-nightstands\/detail-1\/$/);
     expect(await screen.findByText('Link copied')).toBeDefined();
   });
 
@@ -137,7 +137,18 @@ describe('Project view', () => {
 
     await waitFor(() => expect(share).toHaveBeenCalledOnce());
     expect(share.mock.calls[0][0]).toMatchObject({ title: 'Dresser · Woodworks' });
-    expect(share.mock.calls[0][0].url).toMatch(/\/project\/dresser\/image\/5$/);
+    expect(share.mock.calls[0][0].url).toMatch(/\/p\/dresser\/detail-1\/$/);
+  });
+
+  it('shares a 3D model under the name of its preview image', async () => {
+    const share = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal('navigator', { ...navigator, share });
+    renderAt('/project/dresser/image/2');
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Share' }));
+
+    await waitFor(() => expect(share).toHaveBeenCalledOnce());
+    expect(share.mock.calls[0][0].url).toMatch(/\/p\/dresser\/dresser_preview\/$/);
   });
 
   it('falls back to copying the link when the share sheet refuses to open', async () => {
@@ -149,7 +160,7 @@ describe('Project view', () => {
     fireEvent.click(await screen.findByRole('button', { name: 'Share' }));
 
     await waitFor(() => expect(writeText).toHaveBeenCalledOnce());
-    expect(writeText.mock.calls[0][0]).toMatch(/\/project\/dresser\/image\/5$/);
+    expect(writeText.mock.calls[0][0]).toMatch(/\/p\/dresser\/detail-1\/$/);
     expect(await screen.findByText('Link copied')).toBeDefined();
   });
 
