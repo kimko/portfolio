@@ -159,6 +159,31 @@
       "thumb": "images-optimized/file-cabinet/thumb-detail-1.webp",
       "full": "images-optimized/file-cabinet/full-detail-1.webp",
       "blur": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAACQAwCdASoUAA8APzmEuVOvKKWisAgB4CcJaACw/f/gD3RoC1bQAPeMXuAy1GM4+nYZHl1DDgBSza4F/KBgupDCiKgYgwi1+rVK0bCVhdYLFY2s5wUZtA0wUVltNEkk71o1OTNGghLAWakKcJrLJIGe0XqPXQTLoAA="
+    },
+    "mortise-and-tenon-plan_preview": {
+      "thumb": "images-optimized/file-cabinet/thumb-mortise-and-tenon-plan_preview.webp",
+      "full": "images-optimized/file-cabinet/full-mortise-and-tenon-plan_preview.webp",
+      "blur": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAACwAwCdASoUAA8APzmEuVOvKKWisAgB4CcJZQC06B7A6JAnuYoWAAD+3uw/YpnY6WzNaU2X/cGM0ImHnPrvGXaeXv7CdwAA"
+    },
+    "detail-2": {
+      "thumb": "images-optimized/file-cabinet/thumb-detail-2.webp",
+      "full": "images-optimized/file-cabinet/full-detail-2.webp",
+      "blur": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAAAwAwCdASoUAAwAPzmGuVOvKSWisAgB4CcJZwAAetCeH8wAAP7tO0guHC/s3ARqEliOYgBWtj3AAA=="
+    },
+    "detail-3": {
+      "thumb": "images-optimized/file-cabinet/thumb-detail-3.webp",
+      "full": "images-optimized/file-cabinet/full-detail-3.webp",
+      "blur": "data:image/webp;base64,UklGRqoAAABXRUJQVlA4IJ4AAAAQBQCdASoUABsAPzmOv1evKaajqAqp4CcJQBXJeC2f4BMtPWi4y8WH88Fl0lKnnusAAP0q79/M6rm5QlQt4j8A9KpjV23gyfjMOrj+jp87t9zlQmWksjDNXwaa/2qzXLatcB3+O6JqT0Jm4PvxKBVhNKl/9ci+xxv2fDgh6pBNAHmNxrhH6XJf1C6L3wYIOz0qaYSWx1udy5cVAgAAAA=="
+    },
+    "detail-4": {
+      "thumb": "images-optimized/file-cabinet/thumb-detail-4.webp",
+      "full": "images-optimized/file-cabinet/full-detail-4.webp",
+      "blur": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAAAwBACdASoUAA8APzmGuVOvKSWisAgB4CcJZgCdMoAC/vzrKSUeBd6ovcgA+MRMTPN2w76iRnoAee6Dq9FmzE6w2A00Sf2dQ7TiOTKuuFdqFeWxUk7aQik3TfJwAAAA"
+    },
+    "detail-5": {
+      "thumb": "images-optimized/file-cabinet/thumb-detail-5.webp",
+      "full": "images-optimized/file-cabinet/full-detail-5.webp",
+      "blur": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAAAwBACdASoUAA8APzmGuVOvKSWisAgB4CcJaACdMoGv/gKJtoVw5eA2IoAAzfuFSgh2HSQVk7npM3yJg7ssDkVP+6o4WvYN3XL5swvn763wsE/rH2nyGVtjV4w/uIypHWVOFXme+nVaQAAA"
     }
   }
 }

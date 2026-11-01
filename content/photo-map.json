@@ -118,5 +118,25 @@
   "shaker-nightstands/IMG_8723.HEIC": {
     "photo": "detail-5",
     "sha1": "61ef6e4a3b82c036f115ce2cef19a1759c364919"
+  },
+  "file-cabinet/mortise-and-tenon-plan-preview.png": {
+    "photo": "mortise-and-tenon-plan_preview",
+    "sha1": "f6e24ea0fa8d7d06ea0f126bb02bf4da62d5f481"
+  },
+  "file-cabinet/interference-example.jpg": {
+    "photo": "detail-2",
+    "sha1": "9f8233f0767df53148fd1a7e47c16e5cbcc5e09e"
+  },
+  "file-cabinet/drawer-front-glue-up.HEIC": {
+    "photo": "detail-3",
+    "sha1": "402d9cf63e21cff3e580cd4e4863113e8f23fc95"
+  },
+  "file-cabinet/front-rails.HEIC": {
+    "photo": "detail-4",
+    "sha1": "6800a3dfc42999365914ed5b8e3cd718d3226684"
+  },
+  "file-cabinet/back-rails.HEIC": {
+    "photo": "detail-5",
+    "sha1": "ca94a1134bb7d00aa3d0b6c110f7c9e0c5237f93"
   }
 }

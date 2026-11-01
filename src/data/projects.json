@@ -253,9 +253,35 @@
         "alt": "3D model of the file cabinet frame"
       },
       {
+        "type": "fbx",
+        "file": "mortise-and-tenon-plan.fbx",
+        "thumb": "mortise-and-tenon-plan_preview",
+        "alt": "Mortise and tenon plan"
+      },
+      {
+        "type": "img",
+        "name": "detail-2",
+        "alt": "Interference detection finding a flaw in the initial plan"
+      },
+      {
         "type": "img",
         "name": "detail-1",
         "alt": "Side panel glued up from three boards, clamped on the bench"
+      },
+      {
+        "type": "img",
+        "name": "detail-3",
+        "alt": "Drawer front glue-up planed to final thickness"
+      },
+      {
+        "type": "img",
+        "name": "detail-4",
+        "alt": "Front rails"
+      },
+      {
+        "type": "img",
+        "name": "detail-5",
+        "alt": "Back rails planed to thickness, allowing for the reveal"
       }
     ],
     "materials": [
