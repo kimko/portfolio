@@ -14,7 +14,8 @@ All changes go through `npm run content -- <command>`. The tool converts photos 
 - Run every write command with `--dry-run` first, show the user what will happen, then run it for real after they agree.
 - Keep the user's words. In descriptions fix only spelling and grammar; never add claims, adjectives or details they didn't give.
 - No em dashes in anything you write.
-- Photo order tells the build story: design first (renders, 3D models), then in progress, then the finished piece. Within a stage, oldest first; read when a photo was taken with `mdls -raw -name kMDItemContentCreationDate <file>`. The cover is the card image and doesn't need to be first.
+- Every photo and 3D model gets a stage: `plan` (renders, 3D models, Fusion screenshots), `in-progress` (the build) or `final` (the finished piece). The site shows each stage as its own labelled group, and the tool keeps the project in stage order. Within a stage, oldest first. Propose the stage with the alt text and let the user confirm it. The cover is the card image and doesn't need to be first.
+- Some projects split in-progress photos into days (Day 1, Day 2...). If a project's `list` shows days, every new in-progress photo needs one. Run `days <id> --dry-run` to see the date each photo was taken and the proposed numbers, then ask the user to confirm: they may have had shop days without photos, so the real numbers can differ. Set the confirmed numbers with `set-stage <id> in-progress <photo>... --day <n>`. Don't run `days` without `--dry-run` on a project whose days were set by hand, because it renumbers them from the dates.
 
 ## 1. Start: see what's new
 
@@ -33,7 +34,8 @@ If nothing is new, ask what they want to change.
 4. Create the project with the cover, then add the rest:
    ```
    npm run content -- new <id> --title "<title>" --description "<text>" --photo <file> --alt "<alt>" --material "<m>" --technique "<t>"
-   npm run content -- add-photo <id> <file> --alt "<alt>"
+   npm run content -- set-stage <id> <plan|in-progress|final> hero
+   npm run content -- add-photo <id> <file> --alt "<alt>" --stage <plan|in-progress|final>
    npm run content -- skip <id> <file>
    npm run content -- order <id> <photo or model.fbx>...
    ```
@@ -44,12 +46,14 @@ Run `npm run content -- list <id>`, then apply only what the user asked:
 
 | They want to | Command |
 |---|---|
-| Add new photos | `add-photo <id> <file> --alt "<alt>" [--cover]` (look at the photo first to write the alt text) |
-| Add a 3D model (`.fbx` from Fusion 360) | `add-model <id> <model.fbx> --preview <image> --alt "<alt>"` (the preview is a render or screenshot used as its thumbnail) |
+| Add new photos | `add-photo <id> <file> --alt "<alt>" --stage <s> [--day <n>] [--cover]` (look at the photo first to write the alt text) |
+| Add a 3D model (`.fbx` from Fusion 360) | `add-model <id> <model.fbx> --preview <image> --alt "<alt>" --stage plan` (the preview is a render or screenshot used as its thumbnail) |
+| Move photos to another stage or day | `set-stage <id> <plan\|in-progress\|final> <photo or model.fbx>... [--day <n>]` |
+| Split in-progress photos into days | `days <id> --dry-run`, confirm the numbers with the user, then `set-stage ... --day <n>` |
 | Not use a dropped photo | `skip <id> <file>` |
 | Remove a photo or 3D model | `remove-photo <id> <photo or model.fbx>` (the cover needs `set-cover` to another photo first) |
 | Change the cover | `set-cover <id> <photo>` (only the card image; the order stays) |
-| Reorder | `order <id> <photo or model.fbx>...` (every item, once). After `add-photo`, use it to put new photos in their stage |
+| Reorder | `order <id> <photo or model.fbx>...` (every item, once). It can only reorder within a stage; use `set-stage` to move a photo to another stage |
 | Fix alt text | `set-alt <id> <photo> "<alt>"` |
 | Add or remove tags | `edit <id> --add-material "<m>" --remove-technique "<t>"` (options repeat) |
 | Change title or description | `edit <id> --title "<t>" --description "<text>"` |
