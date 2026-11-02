@@ -6,13 +6,15 @@
     "hero": {
       "type": "img",
       "name": "hero",
-      "alt": "Completed small table"
+      "alt": "Completed small table",
+      "stage": "final"
     },
     "images": [
       {
         "type": "img",
         "name": "hero",
-        "alt": "Completed small table"
+        "alt": "Completed small table",
+        "stage": "final"
       }
     ],
     "materials": [
@@ -32,18 +34,21 @@
     "hero": {
       "type": "img",
       "name": "hero",
-      "alt": "Completed Shaker-style bench"
+      "alt": "Completed Shaker-style bench",
+      "stage": "final"
     },
     "images": [
       {
         "type": "img",
         "name": "hero",
-        "alt": "Completed Shaker-style bench"
+        "alt": "Completed Shaker-style bench",
+        "stage": "final"
       },
       {
         "type": "img",
         "name": "detail-1",
-        "alt": "Bench joinery and construction details"
+        "alt": "Bench joinery and construction details",
+        "stage": "final"
       }
     ],
     "materials": [
@@ -63,38 +68,45 @@
     "hero": {
       "type": "img",
       "name": "hero",
-      "alt": "Pair of Shaker-style nightstands"
+      "alt": "Pair of Shaker-style nightstands",
+      "stage": "final"
     },
     "images": [
       {
         "type": "img",
         "name": "detail-4",
-        "alt": "Nightstand frame with maple panels, assembled on the bench"
+        "alt": "Nightstand frame with maple panels, assembled on the bench",
+        "stage": "in-progress"
       },
       {
         "type": "img",
         "name": "detail-5",
-        "alt": "Walnut nightstand frame without panels, on the bench"
+        "alt": "Walnut nightstand frame without panels, on the bench",
+        "stage": "in-progress"
       },
       {
         "type": "img",
         "name": "hero",
-        "alt": "Pair of Shaker-style nightstands"
+        "alt": "Pair of Shaker-style nightstands",
+        "stage": "final"
       },
       {
         "type": "img",
         "name": "detail-1",
-        "alt": "Nightstand detail view"
+        "alt": "Nightstand detail view",
+        "stage": "final"
       },
       {
         "type": "img",
         "name": "detail-2",
-        "alt": "Nightstand construction detail"
+        "alt": "Nightstand construction detail",
+        "stage": "final"
       },
       {
         "type": "img",
         "name": "detail-3",
-        "alt": "Nightstand close-up"
+        "alt": "Nightstand close-up",
+        "stage": "final"
       }
     ],
     "materials": [
@@ -112,30 +124,35 @@
     "hero": {
       "type": "img",
       "name": "hero",
-      "alt": "MCM coffee table in living space"
+      "alt": "MCM coffee table in living space",
+      "stage": "final"
     },
     "images": [
       {
         "type": "fbx",
         "file": "mcm-table.fbx",
         "thumb": "mcm-table_preview",
-        "alt": "MCM Coffee Table 3D Model"
+        "alt": "MCM Coffee Table 3D Model",
+        "stage": "plan"
       },
       {
         "type": "fbx",
         "file": "table_frame.fbx",
         "thumb": "table_frame_preview",
-        "alt": "MCM Coffee Table Frame 3D Model"
+        "alt": "MCM Coffee Table Frame 3D Model",
+        "stage": "plan"
       },
       {
         "type": "img",
         "name": "hero",
-        "alt": "MCM coffee table in living space"
+        "alt": "MCM coffee table in living space",
+        "stage": "final"
       },
       {
         "type": "img",
         "name": "detail-1",
-        "alt": "Angled leg detail"
+        "alt": "Angled leg detail",
+        "stage": "final"
       }
     ],
     "materials": [
@@ -153,66 +170,78 @@
     "hero": {
       "type": "img",
       "name": "detail-5",
-      "alt": "Finished cherry dresser with nine drawers"
+      "alt": "Finished cherry dresser with nine drawers",
+      "stage": "final"
     },
     "images": [
       {
         "type": "img",
         "name": "hero",
-        "alt": "Dresser Fusion 360 design render"
+        "alt": "Dresser Fusion 360 design render",
+        "stage": "plan"
       },
       {
         "type": "fbx",
         "file": "dresser.fbx",
         "thumb": "dresser_preview",
-        "alt": "Dresser 3D Model"
+        "alt": "Dresser 3D Model",
+        "stage": "plan"
       },
       {
         "type": "fbx",
         "file": "dresser_frame.fbx",
         "thumb": "dresser_frame_preview",
-        "alt": "Dresser Frame 3D Model"
+        "alt": "Dresser Frame 3D Model",
+        "stage": "plan"
       },
       {
         "type": "fbx",
         "file": "dominos.fbx",
         "thumb": "dominos_preview",
-        "alt": "Dresser Dominos 3D Model"
+        "alt": "Dresser Dominos 3D Model",
+        "stage": "plan"
       },
       {
         "type": "img",
         "name": "detail-1",
-        "alt": "Dresser work in progress"
+        "alt": "Dresser work in progress",
+        "stage": "in-progress"
       },
       {
         "type": "img",
         "name": "detail-2",
-        "alt": "Dresser construction progress"
+        "alt": "Dresser construction progress",
+        "stage": "in-progress"
       },
       {
         "type": "img",
         "name": "detail-6",
-        "alt": "Dresser frame in the shop, openings numbered with blue tape"
+        "alt": "Dresser frame in the shop, openings numbered with blue tape",
+        "stage": "in-progress"
       },
       {
         "type": "img",
         "name": "detail-7",
-        "alt": "Plywood drawer boxes test-fitted in the frame, fronts not yet on"
+        "alt": "Plywood drawer boxes test-fitted in the frame, fronts not yet on",
+        "stage": "in-progress"
       },
       {
         "type": "img",
         "name": "detail-4",
-        "alt": "Cherry dresser frame assembled, drawer openings still empty"
+        "alt": "Cherry dresser frame assembled, drawer openings still empty",
+        "stage": "in-progress"
       },
       {
         "type": "img",
         "name": "detail-5",
-        "alt": "Finished cherry dresser with nine drawers"
+        "alt": "Finished cherry dresser with nine drawers",
+        "stage": "final"
       },
       {
         "type": "img",
         "name": "detail-8",
-        "alt": "Close-up of the cherry drawer fronts, one drawer pulled open"
+        "alt": "Close-up of the cherry drawer fronts, one drawer pulled open",
+        "stage": "final"
       }
     ],
     "materials": [
@@ -232,55 +261,69 @@
     "hero": {
       "type": "img",
       "name": "hero",
-      "alt": "Fusion 360 render of the file cabinet with both drawers open"
+      "alt": "Fusion 360 render of the file cabinet with both drawers open",
+      "stage": "plan"
     },
     "images": [
       {
         "type": "img",
         "name": "hero",
-        "alt": "Fusion 360 render of the file cabinet with both drawers open"
+        "alt": "Fusion 360 render of the file cabinet with both drawers open",
+        "stage": "plan"
       },
       {
         "type": "fbx",
         "file": "file-cabinet.fbx",
         "thumb": "file-cabinet_preview",
-        "alt": "3D model of the file cabinet"
+        "alt": "3D model of the file cabinet",
+        "stage": "plan"
       },
       {
         "type": "fbx",
         "file": "file-cabinet-frame.fbx",
         "thumb": "file-cabinet-frame_preview",
-        "alt": "3D model of the file cabinet frame"
+        "alt": "3D model of the file cabinet frame",
+        "stage": "plan"
       },
       {
         "type": "img",
         "name": "detail-6",
-        "alt": "Mortise and tenon plan"
+        "alt": "Mortise and tenon plan",
+        "stage": "plan"
       },
       {
         "type": "img",
         "name": "detail-2",
-        "alt": "Interference detection finding a flaw in the initial plan"
+        "alt": "Interference detection finding a flaw in the initial plan",
+        "stage": "plan"
       },
       {
         "type": "img",
         "name": "detail-1",
-        "alt": "Side panel glued up from three boards, clamped on the bench"
+        "alt": "Side panel glued up from three boards, clamped on the bench",
+        "stage": "in-progress",
+        "day": 2
       },
       {
         "type": "img",
         "name": "detail-3",
-        "alt": "Drawer front glue-up planed to final thickness"
+        "alt": "Drawer front glue-up planed to final thickness",
+        "stage": "in-progress",
+        "day": 4
       },
       {
         "type": "img",
         "name": "detail-4",
-        "alt": "Front rails"
+        "alt": "Front rails",
+        "stage": "in-progress",
+        "day": 4
       },
       {
         "type": "img",
         "name": "detail-5",
-        "alt": "Back rails planed to thickness, allowing for the reveal"
+        "alt": "Back rails planed to thickness, allowing for the reveal",
+        "stage": "in-progress",
+        "day": 4
       }
     ],
     "materials": [
