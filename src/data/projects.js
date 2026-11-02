@@ -37,9 +37,11 @@ export const projects = projectsData.map(project => ({
   hero: project.hero.type === 'img' 
     ? img(project.id, project.hero.name, project.hero.alt)
     : fbx(project.id, project.hero.file, project.hero.thumb, project.hero.alt),
-  images: project.images.map(image => 
-    image.type === 'img'
+  images: project.images.map(image => ({
+    ...(image.type === 'img'
       ? img(project.id, image.name, image.alt)
-      : fbx(project.id, image.file, image.thumb, image.alt)
-  )
+      : fbx(project.id, image.file, image.thumb, image.alt)),
+    stage: image.stage,
+    day: image.day,
+  }))
 })).toReversed();

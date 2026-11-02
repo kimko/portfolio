@@ -20,6 +20,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useRoute, useLocation } from 'wouter';
 import ProjectTags from './ProjectTags';
 import LoadingMessage from './LoadingMessage';
+import { groupPhotos, phaseOf } from './photoGroups';
 
 const ModelViewer = lazy(() => import('./ModelViewer'));
 
@@ -87,26 +88,74 @@ const ShareIcon = () => (
   </svg>
 );
 
-function Caption({ children }) {
+const smallCaps = {
+  fontFamily: 'mono',
+  fontSize: { base: '2xs', md: 'xs' },
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+  color: 'night.inkSoft',
+  whiteSpace: 'nowrap',
+};
+
+function Caption({ phase, children }) {
   return (
-    <Text
-      aria-hidden="true"
-      flexShrink={0}
-      w="100%"
-      px={3}
-      pt={2}
-      fontSize="sm"
-      lineHeight="1.4"
-      color="night.inkSoft"
-      textAlign="center"
-      noOfLines={2}
-    >
-      {children}
-    </Text>
+    <Box aria-hidden="true" flexShrink={0} w="100%" px={3} pt={2} textAlign="center">
+      {phase && (
+        <Text {...smallCaps} mb={0.5}>
+          {phase}
+        </Text>
+      )}
+      <Text fontSize="sm" lineHeight="1.4" color="night.inkSoft" noOfLines={2}>
+        {children}
+      </Text>
+    </Box>
   );
 }
 
 const focusRing = { outline: '3px solid', outlineColor: 'accent.ring', outlineOffset: '2px' };
+
+function StripThumb({ image, index, imageCount, isSelected, onSelect }) {
+  return (
+    <Box as="li" flexShrink={0}>
+      <Box
+        as="button"
+        type="button"
+        display="block"
+        w="56px"
+        h="56px"
+        borderRadius="4px"
+        overflow="hidden"
+        position="relative"
+        border="2px solid"
+        borderColor={isSelected ? 'night.ink' : 'transparent'}
+        opacity={isSelected ? 1 : 0.55}
+        transition="opacity 0.2s ease, border-color 0.2s ease"
+        _hover={{ opacity: 1 }}
+        _focusVisible={{ ...focusRing, opacity: 1 }}
+        onClick={onSelect}
+        aria-label={`${image.is3D ? '3D model' : 'Photo'} ${index + 1} of ${imageCount}: ${image.alt}`}
+        aria-current={isSelected ? 'true' : undefined}
+        bg="night.raised"
+        backgroundImage={image.blur ? `url(${image.blur})` : undefined}
+        backgroundSize="cover"
+        backgroundPosition="center"
+      >
+        <Image src={image.thumb} alt="" w="100%" h="100%" objectFit="cover" />
+        <Box
+          position="absolute"
+          bottom="2px"
+          right="2px"
+          bg="rgba(0, 0, 0, 0.6)"
+          p="2px"
+          borderRadius="3px"
+          color="white"
+        >
+          {image.is3D ? <Icon3D /> : <ImageIcon />}
+        </Box>
+      </Box>
+    </Box>
+  );
+}
 
 function ProjectDetails({ project }) {
   return (
@@ -153,6 +202,8 @@ export default function ProjectModal({ project, isOpen, onClose }) {
   const routeIndex = match && params.index ? parseInt(params.index, 10) - 1 : 0;
   const selectedIndex = Math.max(0, Math.min(routeIndex, imageCount - 1));
   const currentImage = activeProject?.images[selectedIndex];
+  const photoGroups = activeProject ? groupPhotos(activeProject.images) : [];
+  const currentPhase = photoGroups.length > 1 && currentImage ? phaseOf(currentImage) : null;
   const imageKey = currentImage ? currentImage.url || currentImage.full : null;
 
   const [loadedKey, setLoadedKey] = useState(null);
@@ -315,7 +366,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                         <ModelViewer key={currentImage.url} url={currentImage.url} alt={currentImage.alt} />
                       </Suspense>
                     </Box>
-                    <Caption>{currentImage.alt}</Caption>
+                    <Caption phase={currentPhase}>{currentImage.alt}</Caption>
                   </Flex>
                 ) : (
                   <>
@@ -377,7 +428,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                             pointerEvents="none"
                           />
                         </MotionBox>
-                        <Caption>{currentImage.alt}</Caption>
+                        <Caption phase={currentPhase}>{currentImage.alt}</Caption>
                       </MotionBox>
                     </AnimatePresence>
                   </>
@@ -425,56 +476,42 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                   as="ul"
                   listStyleType="none"
                   aria-label="Photos and 3D models"
-                  spacing={2}
+                  spacing={0}
+                  align="flex-end"
                   flex="1"
                   minW={0}
                   overflowX="auto"
                   p="4px"
                   sx={{ scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}
                 >
-                  {activeProject.images.map((img, index) => {
-                    const isSelected = index === selectedIndex;
-                    return (
-                      <Box as="li" key={img.url || img.full} flexShrink={0}>
-                        <Box
-                          as="button"
-                          type="button"
-                          display="block"
-                          w="56px"
-                          h="56px"
-                          borderRadius="4px"
-                          overflow="hidden"
-                          position="relative"
-                          border="2px solid"
-                          borderColor={isSelected ? 'night.ink' : 'transparent'}
-                          opacity={isSelected ? 1 : 0.55}
-                          transition="opacity 0.2s ease, border-color 0.2s ease"
-                          _hover={{ opacity: 1 }}
-                          _focusVisible={{ ...focusRing, opacity: 1 }}
-                          onClick={() => showImage(index)}
-                          aria-label={`${img.is3D ? '3D model' : 'Photo'} ${index + 1} of ${imageCount}: ${img.alt}`}
-                          aria-current={isSelected ? 'true' : undefined}
-                          bg="night.raised"
-                          backgroundImage={img.blur ? `url(${img.blur})` : undefined}
-                          backgroundSize="cover"
-                          backgroundPosition="center"
-                        >
-                          <Image src={img.thumb} alt="" w="100%" h="100%" objectFit="cover" />
-                          <Box
-                            position="absolute"
-                            bottom="2px"
-                            right="2px"
-                            bg="rgba(0, 0, 0, 0.6)"
-                            p="2px"
-                            borderRadius="3px"
-                            color="white"
-                          >
-                            {img.is3D ? <Icon3D /> : <ImageIcon />}
-                          </Box>
-                        </Box>
-                      </Box>
-                    );
-                  })}
+                  {photoGroups.map((group, groupIndex) => (
+                    <Flex
+                      as="li"
+                      key={group.label ?? 'all'}
+                      direction="column"
+                      gap={1}
+                      flexShrink={0}
+                      {...(groupIndex > 0 && { ml: 3, pl: 3, borderLeft: '1px solid', borderColor: 'night.line' })}
+                    >
+                      {group.label && (
+                        <Text aria-hidden="true" {...smallCaps}>
+                          {group.label}
+                        </Text>
+                      )}
+                      <HStack as="ul" listStyleType="none" spacing={2} aria-label={group.label ?? undefined}>
+                        {group.items.map(({ image, index }) => (
+                          <StripThumb
+                            key={image.url || image.full}
+                            image={image}
+                            index={index}
+                            imageCount={imageCount}
+                            isSelected={index === selectedIndex}
+                            onSelect={() => showImage(index)}
+                          />
+                        ))}
+                      </HStack>
+                    </Flex>
+                  ))}
                 </HStack>
 
                 <HStack spacing={2} flexShrink={0}>
