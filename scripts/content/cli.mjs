@@ -19,13 +19,15 @@ Change things (add --dry-run to preview)
   edit <project> [--title <t>] [--description <d>]
       [--add-material <m>]... [--remove-material <m>]...
       [--add-technique <t>]... [--remove-technique <t>]...
-  add-photo <project> <file> --alt <text> [--cover]
-  add-model <project> <model.fbx> --preview <image> --alt <text>
+  add-photo <project> <file> --alt <text> [--cover] [--stage <s>] [--day <n>]
+  add-model <project> <model.fbx> --preview <image> --alt <text> [--stage <s>]
   skip <project> <file>          Don't offer this dropped photo again
   remove-photo <project> <photo or model.fbx>
   set-cover <project> <photo>   Card image; doesn't change the order
   order <project> <photo>...    Every photo and model, in the order to show them
   set-alt <project> <photo> <text>
+  set-stage <project> <plan|in-progress|final> <photo or model.fbx>... [--day <n>]
+  days <project>                 Number in-progress photos Day 1, Day 2... by the date taken
   remove-project <project>
   rebuild [project]              Remake web copies from the originals
 
@@ -37,6 +39,8 @@ const OPTIONS = {
   photo: { type: 'string' },
   preview: { type: 'string' },
   alt: { type: 'string' },
+  stage: { type: 'string' },
+  day: { type: 'string' },
   cover: { type: 'boolean' },
   material: { type: 'string', multiple: true },
   technique: { type: 'string', multiple: true },
@@ -52,6 +56,12 @@ const OPTIONS = {
 function needs(positionals, count, usage) {
   if (positionals.length < count) throw new ContentError(`Usage: npm run content -- ${usage}`);
   return positionals;
+}
+
+function parseDay(value) {
+  if (value === undefined) return undefined;
+  if (!/^\d+$/.test(value)) throw new ContentError(`The day must be a whole number from 1 up, not "${value}".`);
+  return Number(value);
 }
 
 function printStatus(report) {
@@ -80,7 +90,8 @@ function printProjects(projects) {
       const photos = project.images.map((image) => {
         const name = image.type === 'fbx' ? `${image.file} [3D]` : image.name;
         const cover = image.type === 'img' && image.name === project.hero?.name ? ' (cover)' : '';
-        return `    ${name}${cover}: ${image.alt}`;
+        const stage = image.stage ? ` [${image.stage}${image.day ? `, day ${image.day}` : ''}]` : '';
+        return `    ${name}${cover}${stage}: ${image.alt}`;
       });
       return [
         `${project.id}: ${project.title}`,
@@ -163,12 +174,14 @@ async function main(argv) {
       );
     }
     case 'add-photo': {
-      const [id, file] = needs(rest, 2, 'add-photo <project> <file> --alt <text> [--cover]');
-      return changed(await commands.addPhotoCommand(paths, id, file, { alt: values.alt, cover: values.cover }, write));
+      const [id, file] = needs(rest, 2, 'add-photo <project> <file> --alt <text> [--cover] [--stage <s>] [--day <n>]');
+      const options = { alt: values.alt, cover: values.cover, stage: values.stage, day: parseDay(values.day) };
+      return changed(await commands.addPhotoCommand(paths, id, file, options, write));
     }
     case 'add-model': {
-      const [id, file] = needs(rest, 2, 'add-model <project> <model.fbx> --preview <image> --alt <text>');
-      return changed(await commands.addModelCommand(paths, id, file, { preview: values.preview, alt: values.alt }, write));
+      const [id, file] = needs(rest, 2, 'add-model <project> <model.fbx> --preview <image> --alt <text> [--stage <s>]');
+      const options = { preview: values.preview, alt: values.alt, stage: values.stage, day: parseDay(values.day) };
+      return changed(await commands.addModelCommand(paths, id, file, options, write));
     }
     case 'skip': {
       const [id, file] = needs(rest, 2, 'skip <project> <file>');
@@ -189,6 +202,14 @@ async function main(argv) {
     case 'set-alt': {
       const [id, name, alt] = needs(rest, 3, 'set-alt <project> <photo> <text>');
       return changed(await commands.setAltCommand(paths, id, name, alt, write));
+    }
+    case 'set-stage': {
+      const [id, stage, ...names] = needs(rest, 3, 'set-stage <project> <plan|in-progress|final> <photo or model.fbx>... [--day <n>]');
+      return changed(await commands.setStageCommand(paths, id, stage, names, { day: parseDay(values.day) }, write));
+    }
+    case 'days': {
+      const [id] = needs(rest, 1, 'days <project>');
+      return changed(await commands.days(paths, id, write));
     }
     case 'remove-project': {
       const [id] = needs(rest, 1, 'remove-project <project>');

@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import sharp from 'sharp';
+import exifReader from 'exif-reader';
 import { ContentError } from './projects.mjs';
 
 export const THUMB = { width: 1000, quality: 72 };
@@ -65,6 +66,25 @@ export async function makeCopies(file, { optimizedDir, projectId, name }) {
       },
       sizes: { thumb, full },
     };
+  } finally {
+    await cleanup();
+  }
+}
+
+function readDateTaken(exif) {
+  try {
+    const taken = exifReader(exif).Photo?.DateTimeOriginal;
+    return taken instanceof Date && !Number.isNaN(taken.getTime()) ? taken.toISOString().slice(0, 10) : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function dateTaken(file) {
+  const { source, cleanup } = await readableSource(file);
+  try {
+    const { exif } = await sharp(source).metadata();
+    return exif ? readDateTaken(exif) : null;
   } finally {
     await cleanup();
   }

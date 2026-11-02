@@ -9,6 +9,8 @@ import {
   reorderPhotos,
   setAlt,
   setCover,
+  setStage,
+  stageProblems,
 } from '../../scripts/content/projects.mjs';
 
 const cover = { type: 'img', name: 'hero', alt: 'Finished bench' };
@@ -95,6 +97,63 @@ describe('ordering photos', () => {
   it('refuses names that are not in the project or are listed twice', () => {
     expect(() => reorderPhotos(bench, ['hero', 'hero', 'detail-1', 'bench.fbx'])).toThrow(/listed twice: hero/);
     expect(() => reorderPhotos(bench, ['hero', 'detail-1', 'bench.fbx', 'detail-9'])).toThrow(/not in bench: detail-9/);
+  });
+});
+
+describe('stages', () => {
+  const names = (project) => project.images.map((image) => image.name ?? image.file);
+  const staged = setStage(setStage(bench, 'final', ['hero']), 'plan', ['bench.fbx']);
+
+  it('moves photos into plan, in progress, final order and keeps the order within a stage', () => {
+    const updated = setStage(staged, 'in-progress', ['detail-1']);
+    expect(names(updated)).toEqual(['bench.fbx', 'detail-1', 'hero']);
+  });
+
+  it('puts in-progress photos in day order', () => {
+    const withTwo = addPhoto(setStage(staged, 'in-progress', ['detail-1'], { day: 2 }), {
+      name: 'detail-2',
+      alt: 'Glue-up',
+      stage: 'in-progress',
+      day: 1,
+    });
+    expect(names(withTwo)).toEqual(['bench.fbx', 'detail-2', 'detail-1', 'hero']);
+  });
+
+  it('adds a staged photo at the end of its stage', () => {
+    const updated = addPhoto(setStage(staged, 'in-progress', ['detail-1']), { name: 'detail-2', alt: 'Glue-up', stage: 'plan' });
+    expect(names(updated)).toEqual(['bench.fbx', 'detail-2', 'detail-1', 'hero']);
+  });
+
+  it('keeps the cover in step with its stage', () => {
+    expect(staged.hero).toEqual({ ...cover, stage: 'final' });
+  });
+
+  it('clears the day when a photo leaves in progress', () => {
+    const moved = setStage(setStage(staged, 'in-progress', ['detail-1'], { day: 1 }), 'final', ['detail-1']);
+    expect(moved.images.find((image) => image.name === 'detail-1')).toEqual({ type: 'img', name: 'detail-1', alt: 'Dovetail', stage: 'final' });
+  });
+
+  it('refuses a stage name it does not know', () => {
+    expect(() => setStage(bench, 'build', ['hero'])).toThrow(/isn't a stage/);
+  });
+
+  it('only gives a day to in-progress photos', () => {
+    expect(() => setStage(bench, 'plan', ['hero'], { day: 1 })).toThrow(/Only in-progress/);
+  });
+
+  it('refuses an order that mixes up the stages', () => {
+    const updated = setStage(staged, 'in-progress', ['detail-1']);
+    expect(() => reorderPhotos(updated, ['detail-1', 'bench.fbx', 'hero'])).toThrow(/mixes up the stages/);
+  });
+
+  it('reports photos left without a stage once a project uses stages', () => {
+    expect(stageProblems(bench)).toEqual([]);
+    expect(stageProblems(staged)).toEqual(['no stage on detail-1']);
+  });
+
+  it('reports in-progress photos left without a day once some have one', () => {
+    const mixed = addPhoto(setStage(staged, 'in-progress', ['detail-1'], { day: 1 }), { name: 'detail-2', alt: 'Glue-up', stage: 'in-progress' });
+    expect(stageProblems(mixed)).toEqual(['no day on detail-2']);
   });
 });
 

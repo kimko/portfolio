@@ -195,3 +195,49 @@ describe('new projects', () => {
     expect((await content.status(paths)).newProjects).toEqual({});
   });
 });
+
+describe('stages and days', () => {
+  const takenOn = (date) => ({ IFD2: { DateTimeOriginal: `${date} 10:00:00` } });
+
+  async function addShopPhoto(file, alt, exif) {
+    await makeJpeg(original('bench', file), { exif });
+    await content.addPhotoCommand(paths, 'bench', file, { alt, stage: 'in-progress' });
+  }
+
+  beforeEach(async () => {
+    await content.setStageCommand(paths, 'bench', 'final', ['hero']);
+    await addShopPhoto('late.jpg', 'Sanding', takenOn('2026:10:31'));
+    await addShopPhoto('early.jpg', 'Glue-up', takenOn('2026:10:03'));
+    await addShopPhoto('same-day.jpg', 'Clamps off', takenOn('2026:10:31'));
+    await addShopPhoto('screenshot.jpg', 'Cut list');
+  });
+
+  it('numbers each date a photo was taken as the next day, in date order', async () => {
+    const summary = await content.days(paths, 'bench');
+
+    const [project] = await readJson(paths.projects);
+    expect(project.images.map((image) => [image.alt, image.day])).toEqual([
+      ['Glue-up', 1],
+      ['Sanding', 2],
+      ['Clamps off', 2],
+      ['Cut list', undefined],
+      ['Finished bench', undefined],
+    ]);
+    expect(summary).toMatch(/Day 1 {2}2026-10-03 {2}detail-2: Glue-up/);
+    expect(summary).toMatch(/no date {2}detail-4: Cut list\. Set it by hand/);
+  });
+
+  it('writes nothing on a dry run', async () => {
+    const before = await fs.readFile(paths.projects, 'utf-8');
+    await content.days(paths, 'bench', { dryRun: true });
+    expect(await fs.readFile(paths.projects, 'utf-8')).toBe(before);
+  });
+
+  it('flags the photo without a day until it gets one by hand', async () => {
+    await content.days(paths, 'bench');
+    expect((await content.check(paths)).problems).toContain('bench: no day on detail-4');
+
+    await content.setStageCommand(paths, 'bench', 'in-progress', ['detail-4'], { day: 3 });
+    expect((await content.check(paths)).problems.filter((problem) => /day|stage/.test(problem))).toEqual([]);
+  });
+});

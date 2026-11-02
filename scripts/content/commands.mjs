@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { loadState, saveState } from './store.mjs';
-import { deleteCopies, fingerprint, isPhotoFile, makeCopies } from './photos.mjs';
+import { dateTaken, deleteCopies, fingerprint, isPhotoFile, makeCopies } from './photos.mjs';
 import {
   ContentError,
   addModel,
@@ -11,6 +11,7 @@ import {
   editProject,
   findPhotoOrModel,
   findProject,
+  itemName,
   nextPhotoName,
   photoKey,
   removePhoto,
@@ -18,6 +19,9 @@ import {
   replaceProject,
   setAlt,
   setCover,
+  setDays,
+  setStage,
+  stageProblems,
   tagCounts,
 } from './projects.mjs';
 
@@ -147,11 +151,11 @@ export async function edit(paths, projectId, changes, { dryRun = false } = {}) {
   return `Updated ${changed.join(', ')} on ${projectId}`;
 }
 
-export async function addPhotoCommand(paths, projectId, file, { alt, cover = false }, { dryRun = false } = {}) {
+export async function addPhotoCommand(paths, projectId, file, { alt, cover = false, stage, day }, { dryRun = false } = {}) {
   const state = await loadState(paths);
   const project = findProject(state.projects, projectId);
   const name = nextPhotoName(project, state.manifest[projectId]);
-  const updated = addPhoto(project, { name, alt, cover });
+  const updated = addPhoto(project, { name, alt, cover, stage, day });
   const { original, sizes } = await ingestPhoto({ paths, state, projectId, file, name, dryRun });
   if (!dryRun) await saveState(paths, { ...state, projects: replaceProject(state.projects, updated) });
   return `Added ${original.key} to ${projectId} as ${name}${cover ? ' (cover)' : ''}${describeSizes(sizes)}`;
@@ -190,7 +194,7 @@ export async function removePhotoCommand(paths, projectId, name, { dryRun = fals
   return `Removed ${name} from ${projectId}; the original stays in content/originals/${projectId}/`;
 }
 
-export async function addModelCommand(paths, projectId, file, { preview, alt }, { dryRun = false } = {}) {
+export async function addModelCommand(paths, projectId, file, { preview, alt, stage, day }, { dryRun = false } = {}) {
   if (!preview) throw new ContentError('A 3D model needs a --preview image for its thumbnail.');
   const state = await loadState(paths);
   const project = findProject(state.projects, projectId);
@@ -203,7 +207,7 @@ export async function addModelCommand(paths, projectId, file, { preview, alt }, 
   if (existsSync(destination)) throw new ContentError(`public/models/${projectId}/${modelName} already exists.`);
 
   const thumb = `${path.parse(modelName).name}_preview`;
-  const updated = addModel(project, { file: modelName, thumb, alt });
+  const updated = addModel(project, { file: modelName, thumb, alt, stage, day });
   const { original, sizes } = await ingestPhoto({ paths, state, projectId, file: preview, name: thumb, dryRun });
   if (!dryRun) {
     await fs.mkdir(path.dirname(destination), { recursive: true });
@@ -225,6 +229,48 @@ export async function order(paths, projectId, names, { dryRun = false } = {}) {
   const updated = reorderPhotos(findProject(state.projects, projectId), names);
   if (!dryRun) await saveState(paths, { ...state, projects: replaceProject(state.projects, updated) });
   return `New order for ${projectId}: ${names.join(', ')}`;
+}
+
+export async function setStageCommand(paths, projectId, stage, names, { day } = {}, { dryRun = false } = {}) {
+  const state = await loadState(paths);
+  const updated = setStage(findProject(state.projects, projectId), stage, names, { day });
+  if (!dryRun) await saveState(paths, { ...state, projects: replaceProject(state.projects, updated) });
+  return `${names.join(', ')} now ${names.length === 1 ? 'belongs' : 'belong'} to ${stage}${day ? `, day ${day}` : ''} in ${projectId}. Order: ${updated.images.map(itemName).join(', ')}`;
+}
+
+export async function days(paths, projectId, { dryRun = false } = {}) {
+  const state = await loadState(paths);
+  const project = findProject(state.projects, projectId);
+  const inProgress = project.images.filter((image) => image.stage === 'in-progress');
+  if (inProgress.length === 0) throw new ContentError(`${projectId} has no in-progress photos yet. Use set-stage first.`);
+
+  const originalOf = new Map(
+    mapEntriesFor(state.photoMap, projectId)
+      .filter(([, entry]) => entry.photo)
+      .map(([key, entry]) => [entry.photo, path.join(paths.originals, key)])
+  );
+  const takenOn = new Map();
+  for (const image of inProgress) {
+    const original = originalOf.get(photoKey(image));
+    takenOn.set(itemName(image), original && existsSync(original) ? await dateTaken(original) : null);
+  }
+  const dates = [...new Set([...takenOn.values()].filter(Boolean))].sort();
+  const daysByName = new Map(
+    [...takenOn].filter(([, date]) => date).map(([name, date]) => [name, dates.indexOf(date) + 1])
+  );
+  const updated = setDays(project, daysByName);
+  if (!dryRun) await saveState(paths, { ...state, projects: replaceProject(state.projects, updated) });
+
+  const lines = updated.images
+    .filter((image) => image.stage === 'in-progress')
+    .map((image) => {
+      const name = itemName(image);
+      const date = takenOn.get(name);
+      return date
+        ? `  Day ${image.day}  ${date}  ${name}: ${image.alt}`
+        : `  no date  ${name}: ${image.alt}. Set it by hand: set-stage ${projectId} in-progress ${name} --day <n>`;
+    });
+  return `Days for ${projectId}, from the date each photo was taken:\n${lines.join('\n')}`;
 }
 
 export async function setAltCommand(paths, projectId, name, alt, { dryRun = false } = {}) {
@@ -295,6 +341,7 @@ export async function check(paths) {
         problems.push(`${project.id}: missing 3D model public/models/${project.id}/${image.file}`);
       }
     }
+    for (const problem of stageProblems(project)) problems.push(`${project.id}: ${problem}`);
     const used = new Set(project.images.map(photoKey));
     for (const key of Object.keys(entries)) {
       if (!used.has(key)) unused.push(`${project.id}/${key}`);
