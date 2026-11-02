@@ -253,9 +253,8 @@
         "alt": "3D model of the file cabinet frame"
       },
       {
-        "type": "fbx",
-        "file": "mortise-and-tenon-plan.fbx",
-        "thumb": "mortise-and-tenon-plan_preview",
+        "type": "img",
+        "name": "detail-6",
         "alt": "Mortise and tenon plan"
       },
       {

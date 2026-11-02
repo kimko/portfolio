@@ -160,11 +160,6 @@
       "full": "images-optimized/file-cabinet/full-detail-1.webp",
       "blur": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAACQAwCdASoUAA8APzmEuVOvKKWisAgB4CcJaACw/f/gD3RoC1bQAPeMXuAy1GM4+nYZHl1DDgBSza4F/KBgupDCiKgYgwi1+rVK0bCVhdYLFY2s5wUZtA0wUVltNEkk71o1OTNGghLAWakKcJrLJIGe0XqPXQTLoAA="
     },
-    "mortise-and-tenon-plan_preview": {
-      "thumb": "images-optimized/file-cabinet/thumb-mortise-and-tenon-plan_preview.webp",
-      "full": "images-optimized/file-cabinet/full-mortise-and-tenon-plan_preview.webp",
-      "blur": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAACwAwCdASoUAA8APzmEuVOvKKWisAgB4CcJZQC06B7A6JAnuYoWAAD+3uw/YpnY6WzNaU2X/cGM0ImHnPrvGXaeXv7CdwAA"
-    },
     "detail-2": {
       "thumb": "images-optimized/file-cabinet/thumb-detail-2.webp",
       "full": "images-optimized/file-cabinet/full-detail-2.webp",
@@ -184,6 +179,11 @@
       "thumb": "images-optimized/file-cabinet/thumb-detail-5.webp",
       "full": "images-optimized/file-cabinet/full-detail-5.webp",
       "blur": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAAAwBACdASoUAA8APzmGuVOvKSWisAgB4CcJaACdMoGv/gKJtoVw5eA2IoAAzfuFSgh2HSQVk7npM3yJg7ssDkVP+6o4WvYN3XL5swvn763wsE/rH2nyGVtjV4w/uIypHWVOFXme+nVaQAAA"
+    },
+    "detail-6": {
+      "thumb": "images-optimized/file-cabinet/thumb-detail-6.webp",
+      "full": "images-optimized/file-cabinet/full-detail-6.webp",
+      "blur": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAABQBACdASoUABUAPzmMulYvKSWjqA1R4CcJZQDNhBEl5qWNab4tQe4PMQAAAP7gmpmxoANH0+L2Ck2ESedKOa2PwyFTOgDgFE78Vzs6PkG1sIwgAAA="
     }
   }
 }
