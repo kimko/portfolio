@@ -206,6 +206,11 @@
       "thumb": "images-optimized/lake-dubay/thumb-detail-3.webp",
       "full": "images-optimized/lake-dubay/full-detail-3.webp",
       "blur": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAACwBACdASoUABYAPzmUwFmvKiajqAgB4CcJQAAFzn26yN8UcFsAMeYWNL1ZXsIAAP6w9sSLLYwzdZAGX3chI/9L6ZGToBl+g+Ll/Ox7f4q4EB9DqUr+LtWsp0BIJgLi9Yi1GXSwPgm0RyoGNXzlI+MYyWy8f0YAAAA="
+    },
+    "detail-4": {
+      "thumb": "images-optimized/lake-dubay/thumb-detail-4.webp",
+      "full": "images-optimized/lake-dubay/full-detail-4.webp",
+      "blur": "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAABQAwCdASoUAB8APzmQulivKaUjqAqp4CcJaQAAOsWDErGKgAD+7o27mpfMU2m+D09HNoxwOAA="
     }
   }
 }

@@ -357,6 +357,12 @@
       },
       {
         "type": "img",
+        "name": "detail-4",
+        "alt": "Laser cutter layout showing the cut and engrave lines for each layer",
+        "stage": "plan"
+      },
+      {
+        "type": "img",
         "name": "detail-3",
         "alt": "First prototype, laser cut from 1/8 inch cardboard",
         "stage": "in-progress"
