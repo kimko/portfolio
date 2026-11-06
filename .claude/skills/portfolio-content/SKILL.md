@@ -61,5 +61,6 @@ Run `npm run content -- list <id>`, then apply only what the user asked:
 ## 4. Finish
 
 1. Run `npm run content -- check` and `npm test`. Both must pass.
-2. Offer to show the change locally (`npm run dev`, then open http://localhost:5173/portfolio/).
-3. Commit only when the user asks. Originals in `content/originals/` are not in git; remind the user to keep their own backup when they add new ones.
+2. Commit right away without asking, one commit per change (a new project, a batch of new photos, a tag edit). Small commits are easy to roll back. Pushing still needs the user to ask.
+3. Offer to show the change locally (`npm run dev`, then open http://localhost:5173/portfolio/).
+4. Originals in `content/originals/` are not in git; remind the user to keep their own backup when they add new ones.
