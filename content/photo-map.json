@@ -142,5 +142,21 @@
   "file-cabinet/mortise-and-tenon-plan.jpg": {
     "photo": "detail-6",
     "sha1": "95436739136ee11f314fe1f0baa3263f45fa419e"
+  },
+  "lake-dubay/prototype-2.png": {
+    "photo": "hero",
+    "sha1": "3160a59f9dc4c038829111a6ea26a4e627d8b758"
+  },
+  "lake-dubay/final-design.png": {
+    "photo": "detail-1",
+    "sha1": "733f2a65b7fffc09e5a5849daaca2845cbc37fd5"
+  },
+  "lake-dubay/color-study.png": {
+    "photo": "detail-2",
+    "sha1": "77de79ac19715f3ba8dec4a4185d4f11c5c08547"
+  },
+  "lake-dubay/prototype-1.png": {
+    "photo": "detail-3",
+    "sha1": "0f074829263ea240a078883b399fcacc00d51525"
   }
 }

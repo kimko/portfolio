@@ -185,5 +185,27 @@
       "full": "images-optimized/file-cabinet/full-detail-6.webp",
       "blur": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAABQBACdASoUABUAPzmMulYvKSWjqA1R4CcJZQDNhBEl5qWNab4tQe4PMQAAAP7gmpmxoANH0+L2Ck2ESedKOa2PwyFTOgDgFE78Vzs6PkG1sIwgAAA="
     }
+  },
+  "lake-dubay": {
+    "hero": {
+      "thumb": "images-optimized/lake-dubay/thumb-hero.webp",
+      "full": "images-optimized/lake-dubay/full-hero.webp",
+      "blur": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAQBACdASoUAB8APyl6tFOuJ6Uit/qoAcAlCUAX5wIZT9YuJvBlrWQ2AADmUdliZQqzTd+l7Spw5PyrwgCQlPwsVAbeLy2CEK9cnjyBE9OvdqYXUsT9wUZOLluAAA=="
+    },
+    "detail-1": {
+      "thumb": "images-optimized/lake-dubay/thumb-detail-1.webp",
+      "full": "images-optimized/lake-dubay/full-detail-1.webp",
+      "blur": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAAAQBACdASoUABcAPzmOvlevKaYjqAqp4CcJaGfkTLZEIRZjiSJgf8mAAAD+4V4Ryc7SV6gEsGLmOluhsxWoGYh8jLjHJ6lDzJYDuZktgGqKSdEq2YmvEZdMn6s8em563nXPJNtwM3YxRcfA1ReaWtb44R1caQ7bAAA="
+    },
+    "detail-2": {
+      "thumb": "images-optimized/lake-dubay/thumb-detail-2.webp",
+      "full": "images-optimized/lake-dubay/full-detail-2.webp",
+      "blur": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAABQBACdASoUABgAPzmIvVavKKajsBgIAeAnCWUAACVkXg7w6QPZ40xYDDOAAP7e7Db6uXSK17XKnkT8g1pFKg6bWs3obrjEPdEVv+gZA8BRTV0xrvFIlxOMceRb7bi2aBeHfsQAAAA="
+    },
+    "detail-3": {
+      "thumb": "images-optimized/lake-dubay/thumb-detail-3.webp",
+      "full": "images-optimized/lake-dubay/full-detail-3.webp",
+      "blur": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAACwBACdASoUABYAPzmUwFmvKiajqAgB4CcJQAAFzn26yN8UcFsAMeYWNL1ZXsIAAP6w9sSLLYwzdZAGX3chI/9L6ZGToBl+g+Ll/Ox7f4q4EB9DqUr+LtWsp0BIJgLi9Yi1GXSwPgm0RyoGNXzlI+MYyWy8f0YAAAA="
+    }
   }
 }

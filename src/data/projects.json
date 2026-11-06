@@ -331,5 +331,50 @@
       "Sapele"
     ],
     "techniques": []
+  },
+  {
+    "id": "lake-dubay",
+    "title": "Lake Dubay Bathymetric Map",
+    "description": "A laser-cut bathymetric map of Lake Dubay. The initial prototype was cut from 1/8\" cardboard, and the second prototype, with an adjusted design, from 1/4\" cardboard. The final piece will be one 1/4\" and three 1/8\" layers of MDF painted with acrylic colors.",
+    "hero": {
+      "type": "img",
+      "name": "hero",
+      "alt": "Second prototype in 1/4 inch cardboard, depths shaded in blue pencil",
+      "stage": "in-progress"
+    },
+    "images": [
+      {
+        "type": "img",
+        "name": "detail-1",
+        "alt": "Final map design with four depth layers, legend and landmarks",
+        "stage": "plan"
+      },
+      {
+        "type": "img",
+        "name": "detail-2",
+        "alt": "Five paint colour options for the land and water layers",
+        "stage": "plan"
+      },
+      {
+        "type": "img",
+        "name": "detail-3",
+        "alt": "First prototype, laser cut from 1/8 inch cardboard",
+        "stage": "in-progress"
+      },
+      {
+        "type": "img",
+        "name": "hero",
+        "alt": "Second prototype in 1/4 inch cardboard, depths shaded in blue pencil",
+        "stage": "in-progress"
+      }
+    ],
+    "materials": [
+      "Cardboard",
+      "MDF",
+      "Acrylic Paint"
+    ],
+    "techniques": [
+      "Laser Cutting"
+    ]
   }
 ]
