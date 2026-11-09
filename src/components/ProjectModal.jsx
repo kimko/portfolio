@@ -160,9 +160,10 @@ function StripThumb({ image, index, imageCount, isSelected, onSelect }) {
         overflow="hidden"
         position="relative"
         border="2px solid"
-        borderColor={isSelected ? 'night.ink' : 'transparent'}
-        opacity={isSelected ? 1 : 0.55}
-        transition="opacity 0.2s ease, border-color 0.2s ease"
+        borderColor={isSelected ? 'accent.rule' : 'transparent'}
+        boxShadow={isSelected ? '0 0 0 2px rgba(183, 121, 31, 0.35)' : 'none'}
+        opacity={isSelected ? 1 : 0.45}
+        transition="opacity 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease"
         _hover={{ opacity: 1 }}
         _focusVisible={{ ...focusRing, opacity: 1 }}
         onClick={onSelect}
