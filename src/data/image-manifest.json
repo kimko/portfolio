@@ -184,6 +184,11 @@
       "thumb": "images-optimized/file-cabinet/thumb-detail-6.webp",
       "full": "images-optimized/file-cabinet/full-detail-6.webp",
       "blur": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAABQBACdASoUABUAPzmMulYvKSWjqA1R4CcJZQDNhBEl5qWNab4tQe4PMQAAAP7gmpmxoANH0+L2Ck2ESedKOa2PwyFTOgDgFE78Vzs6PkG1sIwgAAA="
+    },
+    "detail-7": {
+      "thumb": "images-optimized/file-cabinet/thumb-detail-7.webp",
+      "full": "images-optimized/file-cabinet/full-detail-7.webp",
+      "blur": "data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAACwBACdASoUABsAPzmQvlevKaYjqAqp4CcJYwC90A0lHUNvy5iAfT/RONdVNhoAAP7akaoHMyP5ktlFuCeWW2APaSEWwt3w1WpgA7KSz+PmN0Ufl0Md+3wVZlfmhd3lIYB9B9YJQpa0ntWxqqQCYZUr6HjYikFlzfX6aCV3Wj8XE8tBdmwbjuXEn7RWIrJjooie5mPSNxD/cbZmIsJ8OunUNc4EkAAA"
     }
   },
   "lake-dubay": {
