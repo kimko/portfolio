@@ -14,6 +14,16 @@ vi.mock('../components/ModelViewer', () => ({
 const nightstands = projectsData.find((project) => project.id === 'shaker-nightstands');
 const nightstandPhoto = (position) => nightstands.images[position - 1];
 
+const useDesktopLayout = () =>
+  vi.stubGlobal('matchMedia', (query) => ({
+    matches: query.startsWith('(min-width: 48em)'),
+    media: query,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }));
+
 const renderAt = (path) => {
   const memory = memoryLocation({ path, record: true });
   render(
@@ -71,6 +81,38 @@ describe('Project view', () => {
 
     fireEvent.keyDown(window, { key: 'ArrowLeft' });
     await waitFor(() => expect(memory.history.at(-1)).toBe('/project/shaker-nightstands'));
+  });
+
+  it('steps to the next and previous photo with the buttons beside it on desktop', async () => {
+    useDesktopLayout();
+    const memory = renderAt('/project/shaker-nightstands/image/2');
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Next photo' }));
+    await waitFor(() => expect(memory.history.at(-1)).toBe('/project/shaker-nightstands/image/3'));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Previous photo' }));
+    await waitFor(() => expect(memory.history.at(-1)).toBe('/project/shaker-nightstands/image/2'));
+  });
+
+  it('offers no previous button on the first photo', async () => {
+    useDesktopLayout();
+    renderAt('/project/shaker-nightstands');
+    expect(await screen.findByRole('button', { name: 'Next photo' })).toBeDefined();
+    expect(screen.queryByRole('button', { name: 'Previous photo' })).toBeNull();
+  });
+
+  it('offers no next button on the last photo', async () => {
+    useDesktopLayout();
+    renderAt(`/project/shaker-nightstands/image/${nightstands.images.length}`);
+    expect(await screen.findByRole('button', { name: 'Previous photo' })).toBeDefined();
+    expect(screen.queryByRole('button', { name: 'Next photo' })).toBeNull();
+  });
+
+  it('leaves stepping through photos to swipes on mobile, without buttons', async () => {
+    renderAt('/project/shaker-nightstands/image/2');
+    await screen.findByRole('dialog');
+    expect(screen.queryByRole('button', { name: 'Next photo' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Previous photo' })).toBeNull();
   });
 
   it('leaves pinch-zoom to the browser while a photo is at normal size', async () => {

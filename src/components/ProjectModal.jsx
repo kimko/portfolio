@@ -88,6 +88,18 @@ const ShareIcon = () => (
   </svg>
 );
 
+const ChevronLeftIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" {...iconProps}>
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+
+const ChevronRightIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" {...iconProps}>
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+
 const smallCaps = {
   fontFamily: 'mono',
   fontSize: { base: '2xs', md: 'xs' },
@@ -113,6 +125,27 @@ function Caption({ phase, children }) {
 }
 
 const focusRing = { outline: '3px solid', outlineColor: 'accent.ring', outlineOffset: '2px' };
+
+function StepButton({ side, label, icon, onClick }) {
+  return (
+    <IconButton
+      variant="onDark"
+      isRound
+      size="lg"
+      icon={icon}
+      aria-label={label}
+      onClick={onClick}
+      position="absolute"
+      top="50%"
+      transform="translateY(-50%)"
+      {...{ [side]: 4 }}
+      zIndex={5}
+      bg="rgba(21, 19, 15, 0.7)"
+      _hover={{ bg: 'night.hover' }}
+      _focusVisible={focusRing}
+    />
+  );
+}
 
 function StripThumb({ image, index, imageCount, isSelected, onSelect }) {
   return (
@@ -432,6 +465,23 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                       </MotionBox>
                     </AnimatePresence>
                   </>
+                )}
+
+                {isDesktop && selectedIndex > 0 && (
+                  <StepButton
+                    side="left"
+                    label="Previous photo"
+                    icon={<ChevronLeftIcon />}
+                    onClick={() => showImage(selectedIndex - 1)}
+                  />
+                )}
+                {isDesktop && selectedIndex < imageCount - 1 && (
+                  <StepButton
+                    side="right"
+                    label="Next photo"
+                    icon={<ChevronRightIcon />}
+                    onClick={() => showImage(selectedIndex + 1)}
+                  />
                 )}
 
                 <AnimatePresence>
