@@ -148,9 +148,22 @@ function StepButton({ side, label, icon, onClick }) {
 }
 
 function StripThumb({ image, index, imageCount, isSelected, onSelect }) {
+  const buttonRef = useRef(null);
+
+  useEffect(() => {
+    if (!isSelected) return;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    buttonRef.current.scrollIntoView({
+      block: 'nearest',
+      inline: 'center',
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    });
+  }, [isSelected]);
+
   return (
     <Box as="li" flexShrink={0}>
       <Box
+        ref={buttonRef}
         as="button"
         type="button"
         display="block"

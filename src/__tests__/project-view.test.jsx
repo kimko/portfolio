@@ -161,6 +161,18 @@ describe('Project view', () => {
     expect(current.getAttribute('aria-current')).toBe('true');
   });
 
+  it('scrolls the photo strip to keep the current photo in view', async () => {
+    const scrollIntoView = vi.spyOn(Element.prototype, 'scrollIntoView');
+    renderAt('/project/shaker-nightstands');
+    await screen.findByRole('dialog');
+
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+    const current = await screen.findByRole('button', { name: new RegExp(`^Photo 2 of ${nightstands.images.length}`) });
+    await waitFor(() => expect(scrollIntoView.mock.contexts).toContain(current));
+    scrollIntoView.mockRestore();
+  });
+
   it('copies a link to the exact photo being viewed when the device has no share sheet', async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal('navigator', { ...navigator, share: undefined, clipboard: { writeText } });
